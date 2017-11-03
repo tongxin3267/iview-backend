@@ -1,5 +1,5 @@
 <template>
-    <p>Welcome to your iView app!</p>
+    <h3>Home，hello!</h3>
 </template>
 <script>
     export default {
