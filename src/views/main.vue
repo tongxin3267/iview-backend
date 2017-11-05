@@ -91,7 +91,7 @@
         <header class="layout-header">
             <div class="layout-wrap">
                 <a class="logo">
-                    <img src="https://file.iviewui.com/dist/fe8d29da1225d943e30f9ee1bddce78f.png">
+                    <img alt="logo" src="https://t.alipayobjects.com/images/rmsweb/T1B9hfXcdvXXXXXXXX.svg">
                     <span>Ant Design</span>
                 </a>
             </div>
