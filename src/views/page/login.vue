@@ -5,21 +5,26 @@
                 <img alt="logo" src="https://t.alipayobjects.com/images/rmsweb/T1B9hfXcdvXXXXXXXX.svg">
                 <span>一个 UI 设计语言</span>
             </a>
-            <Card style="padding:20px 20px 0" :padding="0" :dis-hover="true">
-                <Form ref="loginForm" :model="form" :rules="rules" :show-message="false">
-                    <FormItem prop="userName" label="用户名" style="margin-bottom:10px;">
-                        <Input v-model="form.userName">
-
-                        </Input>
-                    </FormItem>
-                    <FormItem prop="password" label="密码">
-                        <Input type="password" v-model="form.password">
-                        </Input>
-                    </FormItem>
-                    <FormItem>
-                        <Button @click="handleSubmit" type="primary" long>登 录</Button>
-                    </FormItem>
-                </Form>
+            <Card  :padding="0" :dis-hover="true">
+                <p slot="title">
+                    <Icon type="log-in"></Icon>
+                    欢迎登录
+                </p>
+                <div class="login-content">
+                   <Form ref="loginForm" :model="form" :rules="rules">
+                        <FormItem prop="userName">
+                            <Input v-model="form.userName" placeholder="请输入用户名" size="large">
+                            </Input>
+                        </FormItem>
+                        <FormItem prop="password">
+                            <Input type="password" v-model="form.password" placeholder="请输入密码" size="large">
+                            </Input>
+                        </FormItem>
+                        <FormItem>
+                            <Button @click="handleSubmit" type="primary" size="large" long >登 录</Button>
+                        </FormItem>
+                    </Form>
+                </div>
             </Card>
         </div>
         <div class="login-footer">Copyright  2017 蚂蚁金服体验技术部出品</div>
@@ -37,17 +42,24 @@ export default {
             },
             rules: {
                 userName: [
-                    { message: '账号不能为空', trigger: 'blur' }
+                    { required: true, message: '账号不能为空', trigger: 'blur' }
                 ],
                 password: [
-                    { message: '密码不能为空', trigger: 'blur' }
+                    { required: true, message: '密码不能为空', trigger: 'blur' }
                 ]
             }
         };
     },
     methods: {
         handleSubmit () {
-           
+            this.$refs.loginForm.validate((valid) => {
+                if (valid) {
+                    this.$store.commit('login',this.form);
+                    this.$router.replace({
+                        name: 'home'
+                    });
+                }
+            });
         }
     }
 };
@@ -96,7 +108,7 @@ export default {
     font-size:16px;
 }
 .login-content{
-
+    padding:30px 20px 10px;
 }
 
 .login-footer{
