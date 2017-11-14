@@ -1,5 +1,6 @@
 import axios from 'axios';
 import env from '../config/env';
+import Cookies from 'js-cookie';
 
 let util = {
 
@@ -19,5 +20,29 @@ util.ajax = axios.create({
     baseURL: ajaxUrl,
     timeout: 30000
 });
+
+
+util.getUserCache = function(){
+	return (Cookies.get('userName') && Cookies.get('password')) || false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default util;

@@ -18,14 +18,5 @@
                 
             };
         },
-        mounted () {
-
-        },
-        beforeDestroy () {
-
-        },
-        methods: {
-
-        }
     };
 </script>

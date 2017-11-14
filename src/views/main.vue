@@ -24,15 +24,17 @@
         bottom: 0;
     }
     .logo{
+        float: left;
+        display: inline-block;
+        height: 60px;
         overflow: hidden;
     }
     .logo img{
-        float:left;
+        float: left;
+        display: block;
         height:60px;
     }
     .logo span{
-        display:block;
-        height:60px;
         line-height:60px;
         font-size:16px;
     }
@@ -42,7 +44,6 @@
         height: inherit;
     }
     .layout-content{
-        min-height: 200px;
         margin: 20px 0  10px;
         overflow: hidden;
         background: #fff;
@@ -50,7 +51,7 @@
         box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
     }
     .layout-navigate{
-        padding: 15px 0;
+        padding: 10px 0;
         font-size: 14px;
     }
     .layout-navigate:after{
@@ -68,16 +69,17 @@
     }*/
     .layout-content-main{
         padding: 20px;
+        min-height: 200px;
     }
     .layout-content-main:after{
         content: "";
-        display: block;
-        width: 1px;
-        background: #d7dde4;
         position: absolute;
         top: 0;
         bottom: 0;
         left: -1px;
+        display: block;
+        width: 1px;
+        background: #d7dde4;
     }
     .layout-footer{
         display:block;
@@ -90,10 +92,11 @@
     <div class="layout">
         <header class="layout-header">
             <div class="layout-wrap">
-                <a class="logo">
+                <a class="logo clearfix">
                     <img alt="logo" src="https://t.alipayobjects.com/images/rmsweb/T1B9hfXcdvXXXXXXXX.svg">
                     <span>Ant Design</span>
                 </a>
+                <userAvatar></userAvatar>
             </div>
         </header>
         <div class="layout-wrap">
@@ -101,7 +104,7 @@
                 <Row>
                     <Col span="4">
                         <div class="layout-navigate">
-            <!--                 <siderMenu :menu="menu" :iconSize="14"/> -->
+                            <sideMenu :menu="menu" :open="open" :iconSize="iconSize"></sideMenu>
                         </div>
                     </Col>
                     <Col span="20">
@@ -118,23 +121,25 @@
     </div>
 </template>
 <script>
-    import siderMenu from './components/siderMenu.vue';
+    import sideMenu from './components/sideMenu.vue';
+    import userAvatar from './components/userAvatar.vue';
     export default {
+        components: {
+            sideMenu,
+            userAvatar
+        },
         data() {
             return {
-
+                iconSize: 14,
             };
         },
-        mounted: {
+        computed: {
             menu() {
                 return this.$store.state.menu;
             },
-        },
-        beforeDestroy() {
-
-        },
-        methods: {
-
+            open(){
+                return this.$store.state.open;
+            }
         }
     };
 </script>

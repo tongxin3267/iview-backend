@@ -26,12 +26,12 @@ router.beforeEach((to, from, next) => {
     Util.title(to.meta.title);
 
     let isLogin = Boolean(store.state.isLogin); //true用户已登录， false用户未登录
-
-    if (!isLogin && to.path !== '/login') {
-        return next({ path: '/login' })
+    console.log(to);
+    if (!isLogin && to.name !== 'login') {
+        return next('login')
     }
-    if (isLogin && (to.path === '/login') || (to.path === '/')) {
-        return next({ path: '/home' })
+    if (isLogin && to.name === 'login') {
+        return next('home' )
     }
     next();
 });
@@ -44,9 +44,9 @@ router.afterEach(() => {
 //状态管理
 const store = new Vuex.Store({
     state: {
-        isLogin: (Cookies.get('userName') && Cookies.get('password')) || false,
-        menu: [],
-        lang: '',
+        isLogin: Util.getUserCache(), //登入判断
+        menu: [], //菜单路由传入
+        open: [], //默认打开的菜单
     },
     mutations: {
         login(state,form){
@@ -59,24 +59,22 @@ const store = new Vuex.Store({
             Cookies.remove('password');
         },
         menuInit(state){
-            let menu = [];
-            appRouter.forEach((item, index) => {
-                menu.push(item)
-            })
             state.menu = appRouter;
+            appRouter.forEach((item, index) => {
+                state.open.push(item.name);
+            })
         }
     },
     actions: {
     }
 });
 
-
 new Vue({
     el: '#app',
     router: router,
     store: store,
     render: h => h(App),
-    mounted (){
+    mounted () {
         this.$store.commit('menuInit');
     }
 });

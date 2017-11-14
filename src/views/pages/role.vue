@@ -1,5 +1,5 @@
 <template>
-    <h3>Home，hello!</h3>
+    <h3>role.vue</h3>
 </template>
 <script>
     export default {
@@ -19,7 +19,3 @@
         }
     };
 </script>
-<style>
-h3{font-size:18px}
-
-</style>
