@@ -18,35 +18,44 @@ export const appRouter = [
 
 ];
 // main组件路由
-export const commonRouter = [
-    {
-        path:'/',
-        component: Main,
-        redirect: '/home',
-        children:[
-            { 
-                path: '/user', 
-                name: 'user', 
-                meta: { title: '个人中心'},
-                component: resolve => { require(['./views/pages/home.vue'], resolve); }
-            },
-            { 
-                path: '/user/update-password', 
-                name: 'update-password', 
-                meta: { title: '修改密码'},
-                component: resolve => { require(['./views/pages/updatePassword.vue'], resolve); }
-            },
-        ]
-    },
+export const userRouter = {
+    path:'/use',
+    component: Main,
+    redirect: '/home',
+    children:[
+        { 
+            path: '/user', 
+            name: 'user', 
+            meta: { title: '个人中心',icon:'person'},
+            component: resolve => { require(['./views/pages/user.vue'], resolve); }
+        },
+        { 
+            path: '/user/update-password', 
+            name: 'update-password', 
+            meta: { title: '修改密码',icon:'gear-a'},
+            component: resolve => { require(['./views/pages/updatePassword.vue'], resolve); }
+        },
+    ]
+};
+
+export const commonRouter=[
     { 
         path: '/login', 
         name: 'login', 
         meta: { title: '登入', requiresAuth: false },
         component: resolve => { require(['./views/pages/login.vue'], resolve); }
     },
-];
+    { 
+        path: '*', 
+        name: '404', 
+        meta: { title: '404-页面未找到！', requiresAuth: false },
+        component: resolve => { require(['./views/pages/404.vue'], resolve); }
+    },
+
+]
 // 所有定义的路由
 export const routers = [
-    ...commonRouter,
     ...appRouter,
+    userRouter,
+    ...commonRouter
 ];

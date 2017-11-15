@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-navigate">
         <Menu ref="sideMenu" :active-name="$route.name"  :open-names="open" width="auto" @on-select="toRouter">
-            <template v-for="item in menu">
+            <template v-for="item in sideMenu">
                 <Submenu :name="item.name" :key="item.path">
                     <template slot="title">
                         <Icon :type="item.meta.icon" :size="iconSize"></Icon>{{item.meta.title}}
@@ -10,7 +10,7 @@
                         <MenuItem :name="child.name" :key="child.path">{{child.meta.title}}</MenuItem>
                     </template>
                 </Submenu>
-            </template>
+            </template> 
         </Menu>
     </div>	
 </template>
@@ -19,12 +19,16 @@
 	export default {
         data () {
             return {
+                iconSize: 14,
             };
         },
-        props: {
-            menu: Array,
-            open: Array,
-            iconSize: Number,
+        computed: {
+            sideMenu() {
+                return this.$store.state.sideMenu;
+            },
+            open(){
+                return this.$store.state.open;
+            }
         },
 		methods:{
 			toRouter(name){

@@ -15,15 +15,16 @@
 </style>
 <template>
     <div class="user-avatar">
-    	<Dropdown placement="bottom-end">
+    	<Dropdown placement="bottom-end" @on-click="toRouter">
             <a href="javascript:;">
                 <Avatar icon="person" style="vertical-align: middle;" />
                 <span class="user-avatar-name">Admin</span>
             </a>
             <DropdownMenu slot="list" style="text-align:center">
-                <DropdownItem><Icon type="person"></Icon> 个人中心</DropdownItem>
-                <DropdownItem><Icon type="gear-a"></Icon> 修改密码</DropdownItem>
-                <DropdownItem divided><Icon type="log-out"></Icon> 退出登入</DropdownItem>
+                <template v-for="item in userMenu"> 
+                    <DropdownItem :name="item.name"><Icon :type="item.meta.icon" style="padding-right: 4px;"></Icon>{{item.meta.title}}</DropdownItem>
+                </template>
+                <DropdownItem divided name="logout"><Icon type="log-out"></Icon> 退出登入</DropdownItem>
             </DropdownMenu>
         </Dropdown>
     </div>
@@ -35,8 +36,30 @@
             return {
             };
         },
+        computed: {
+            userMenu() {
+                return this.$store.state.userMenu;
+            },
+        },
 		methods:{
-
+            toRouter(name){
+                if (name === 'logout') {
+                    this.$store.commit('logout');
+                    this.$router.push({
+                        name: 'login'
+                    });
+                }
+                if (name === 'user') {
+                    this.$router.push({
+                        name: 'user',
+                        params: { username: this.$store.state.user.userName }
+                    });
+                }
+                this.$router.push({
+                    name: name
+                });
+                
+            }
 		}
 	}
 </script>

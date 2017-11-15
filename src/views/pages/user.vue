@@ -1,5 +1,5 @@
 <template>
-    <h3>dashboard.vue</h3>
+    <h3><!-- {{$route.params.userName}} --></h3>
 </template>
 <script>
     export default {
@@ -8,14 +8,8 @@
 
             };
         },
-        mounted() {
+       computed: {
 
         },
-        beforeDestroy() {
-
-        },
-        methods: {
-
-        }
     };
 </script>

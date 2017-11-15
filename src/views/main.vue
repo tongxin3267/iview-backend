@@ -104,7 +104,7 @@
                 <Row>
                     <Col span="4">
                         <div class="layout-navigate">
-                            <sideMenu :menu="menu" :open="open" :iconSize="iconSize"></sideMenu>
+                            <sideMenu></sideMenu>
                         </div>
                     </Col>
                     <Col span="20">
@@ -133,13 +133,6 @@
                 iconSize: 14,
             };
         },
-        computed: {
-            menu() {
-                return this.$store.state.menu;
-            },
-            open(){
-                return this.$store.state.open;
-            }
-        }
+       
     };
 </script>
