@@ -17,22 +17,20 @@ Vue.use(iView);
 //状态管理
 const store = new Vuex.Store({
     state: {
-        isLogin: Util.autoLogin(), //登入判断
-        user: Util.getUser(), //获取用户信息
+        user: {}, //获取用户信息
         sideMenu: [], //菜单路由传入
         userMenu: [], //个人菜单路由传入
         open: [], //默认打开的菜单
     },
     mutations: {
-        login(state, form) {
-            Cookies.set('userName', form.userName);
-            Cookies.set('password', form.password);
-            state.isLogin = true;
+        login(state, user) {
+        	state.user = {
+            	userName: user.userName,
+            };
+            Cookies.set('_userInfo', state.user, { expires: 7 });
         },
         logout(state) {
-            Cookies.remove('userName');
-            Cookies.remove('password');
-            state.isLogin = false;
+            Cookies.remove('_userInfo');
         },
         menuInit(state) {
             state.sideMenu = appRouter;
@@ -53,21 +51,13 @@ const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     Util.title(to.meta.title);
-    let isLogin = Boolean(store.state.isLogin); //true用户已登录， false用户未登录
+    let isLogin = Boolean(store.state.user.userName); //true用户已登录， false用户未登录
     if (!isLogin && to.name !== 'login') {
-        next('login')
+        next({name:'login'});
     }
     if (isLogin && to.name === 'login') {
-        next('home')
+        next({name:'home'});
     }
-    if (to.name === 'logout') {
-        store.commit('logout');
-        next('login');
-    }
-    if (to.name === 'user') {
-
-    }
-    console.log('beforeEach')
     next();
 });
 router.afterEach(() => {

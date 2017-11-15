@@ -18,7 +18,7 @@
     	<Dropdown placement="bottom-end" @on-click="toRouter">
             <a href="javascript:;">
                 <Avatar icon="person" style="vertical-align: middle;" />
-                <span class="user-avatar-name">Admin</span>
+                <span class="user-avatar-name">{{userName}}</span>
             </a>
             <DropdownMenu slot="list" style="text-align:center">
                 <template v-for="item in userMenu"> 
@@ -34,25 +34,30 @@
 	export default {
         data () {
             return {
+
             };
         },
         computed: {
             userMenu() {
                 return this.$store.state.userMenu;
             },
+            userName(){
+                return this.$store.state.user.userName;
+            }
         },
 		methods:{
             toRouter(name){
-                if (name === 'logout') {
-                    this.$store.commit('logout');
-                    this.$router.push({
-                        name: 'login'
-                    });
-                }
                 if (name === 'user') {
+                    const userName =  this.userName;
                     this.$router.push({
                         name: 'user',
-                        params: { username: this.$store.state.user.userName }
+                        params: { username: userName }
+                    });
+                }
+                if (name === 'logout') {
+                    this.$store.commit('logout');
+                    this.$router.replace({ 
+                        name:'login' 
                     });
                 }
                 this.$router.push({

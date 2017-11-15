@@ -24,7 +24,7 @@ export const userRouter = {
     redirect: '/home',
     children:[
         { 
-            path: '/user', 
+            path: '/user/:username', 
             name: 'user', 
             meta: { title: '个人中心',icon:'person'},
             component: resolve => { require(['./views/pages/user.vue'], resolve); }

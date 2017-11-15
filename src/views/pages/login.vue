@@ -54,7 +54,8 @@ export default {
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    this.$store.commit('login',this.form);
+                    let _userInfo = { userName:this.form.userName };
+                    this.$store.commit('login',_userInfo);
                     this.$router.replace({
                         name: 'home'
                     });
