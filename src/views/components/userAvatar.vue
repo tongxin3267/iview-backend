@@ -10,7 +10,7 @@
     padding: 0 6px;
     font-size: 14px;
     line-height: 32px;
-    vertical-align: middle;
+    vertical-align: middle; 
 }
 </style>
 <template>
@@ -41,7 +41,7 @@
                 return this.$store.state.userMenu;
             },
             userName(){
-                return this.$store.state.user.userName;
+                return this.$store.state.user ? this.$store.state.user.userName : undefined;
             }
         },
 		methods:{
@@ -53,7 +53,9 @@
                     });
                 }else if (name === 'logout') {
                     this.$store.commit('logout');
-                    this.$router.push({name: 'logout'});
+                    this.$router.push({
+                        name: 'logout'
+                    });
                 }else{
                     this.$router.push({
                         name: name

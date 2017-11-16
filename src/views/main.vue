@@ -38,11 +38,6 @@
         line-height:60px;
         font-size:16px;
     }
-    .layout-assistant{
-        width: 300px;
-        margin: 0 auto;
-        height: inherit;
-    }
     .layout-content{
         margin: 20px 0  10px;
         overflow: hidden;
@@ -64,9 +59,6 @@
         bottom: 0;
         right: 0;
     }
-/*    .ivu-menu-item-selected{
-        background: #ecf6fd;
-    }*/
     .layout-content-main{
         padding: 20px;
         min-height: 200px;
@@ -94,7 +86,7 @@
             <div class="layout-wrap">
                 <a class="logo clearfix">
                     <img alt="logo" src="https://t.alipayobjects.com/images/rmsweb/T1B9hfXcdvXXXXXXXX.svg">
-                    <span>Ant Design</span>
+                    <span>iView-Backend</span>
                 </a>
                 <userAvatar></userAvatar>
             </div>
@@ -127,12 +119,6 @@
         components: {
             sideMenu,
             userAvatar
-        },
-        data() {
-            return {
-                iconSize: 14,
-            };
-        },
-       
+        }, 
     };
 </script>

@@ -10,7 +10,7 @@ import store from './store/index';
 import 'iview/dist/styles/iview.css';
 
 
-Vue.use(VueRouter);
+Vue.use(VueRouter); 
 Vue.use(iView);
 
 //注册axios为 $http

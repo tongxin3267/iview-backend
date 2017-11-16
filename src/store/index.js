@@ -8,8 +8,8 @@ export default new Vuex.Store({
     state: {
     	user: {}, //获取用户信息 
         sideMenu: [], //菜单路由传入
+        openSubmenu: [], //默认打开的菜单
         userMenu: [], //个人菜单路由传入
-        open: [], //默认打开的菜单
     },
     mutations: {
         login(state, user) {
@@ -20,18 +20,18 @@ export default new Vuex.Store({
             state.user = {};
             cookies.remove('_auth');
         },
-        menuInit(state,{sideMenu,userMenu}) {
+        menuInit(state,{sideMenu,userMenu}) { 
             state.sideMenu = sideMenu;
             state.userMenu = userMenu;
             sideMenu.forEach((item, index) => {
-                state.open.push(item.name);
+                state.openSubmenu.push(item.name);
             })
         }
     },
     actions: {
         autoLogin({commit}, next){
             if (cookies.get('_auth')) {
-                axios.get('./static/user.json', data).then(function (res) {
+                axios.get('./static/user.json').then(function (res) {
                     commit('login',res.data.data);
                     next();
                 }).catch(function (error) {

@@ -45,6 +45,10 @@ export const userRouter = {
 };
 
 export const commonRouter=[
+    {
+        path:'/',
+        redirect: '/home',
+    },
     { 
         path: '/login', 
         name: 'login', 

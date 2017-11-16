@@ -1,6 +1,11 @@
+<style type="text/css">
+    .ivu-menu-item-selected{
+        background: #ecf6fd;
+    }
+</style>
 <template>
 	<div class="layout-navigate">
-        <Menu ref="sideMenu" :active-name="$route.name"  :open-names="open" width="auto" @on-select="toRouter">
+        <Menu ref="sideMenu" :active-name="$route.name"  :open-names="openSubmenu" width="auto" @on-select="toRouter">
             <template v-for="item in sideMenu">
                 <Submenu :name="item.name" :key="item.path">
                     <template slot="title">
@@ -26,8 +31,8 @@
             sideMenu() {
                 return this.$store.state.sideMenu;
             },
-            open(){
-                return this.$store.state.open;
+            openSubmenu(){
+                return this.$store.state.openSubmenu;
             }
         },
 		methods:{
