@@ -1,5 +1,5 @@
 <template>
-    <h3><!-- {{$route.params.userName}} --></h3>
+    <h3>{{$route.params.username}}</h3>
 </template>
 <script>
     export default {

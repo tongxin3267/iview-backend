@@ -35,6 +35,12 @@ export const userRouter = {
             meta: { title: '修改密码',icon:'gear-a'},
             component: resolve => { require(['./views/pages/updatePassword.vue'], resolve); }
         },
+        { 
+            path: '/user/logout', 
+            name: 'logout', 
+            meta: { title: '退出登入',icon:'log-out',divided: true},
+            redirect: '/login',
+        },
     ]
 };
 
@@ -42,13 +48,13 @@ export const commonRouter=[
     { 
         path: '/login', 
         name: 'login', 
-        meta: { title: '登入', requiresAuth: false },
+        meta: { title: '登入', auth: false },
         component: resolve => { require(['./views/pages/login.vue'], resolve); }
     },
     { 
         path: '*', 
         name: '404', 
-        meta: { title: '404-页面未找到！', requiresAuth: false },
+        meta: { title: '404-页面未找到！', auth: false },
         component: resolve => { require(['./views/pages/404.vue'], resolve); }
     },
 

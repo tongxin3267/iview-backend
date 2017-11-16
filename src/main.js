@@ -1,75 +1,61 @@
 import Vue from 'vue';
-import iView from 'iview';
 import VueRouter from 'vue-router';
-import {
-    routers,
-    appRouter,
-    userRouter
-} from './router';
-import Vuex from 'vuex';
-import Util from './libs/util';
+import iView from 'iview';
+import cookies from 'js-cookie';
+import axios from 'axios';
 import App from './app.vue';
-import Cookies from 'js-cookie';
+import {routers,appRouter,userRouter} from './router';
+import util from './libs/util';
+import store from './store/index';
 import 'iview/dist/styles/iview.css';
-Vue.use(Vuex);
+
+
 Vue.use(VueRouter);
 Vue.use(iView);
-//状态管理
-const store = new Vuex.Store({
-    state: {
-        user: {}, //获取用户信息
-        sideMenu: [], //菜单路由传入
-        userMenu: [], //个人菜单路由传入
-        open: [], //默认打开的菜单
-    },
-    mutations: {
-        login(state, user) {
-        	state.user = {
-            	userName: user.userName,
-            };
-            Cookies.set('_userInfo', state.user, { expires: 7 });
-        },
-        logout(state) {
-            Cookies.remove('_userInfo');
-        },
-        menuInit(state) {
-            state.sideMenu = appRouter;
-            state.userMenu = userRouter.children;
-            appRouter.forEach((item, index) => {
-                state.open.push(item.name);
-            })
-        }
-    },
-    actions: {}
-});
+
+//注册axios为 $http
+Vue.prototype.$http = axios;
+
 // 路由配置
 const RouterConfig = {
     mode: 'history',
     routes: routers
 };
 const router = new VueRouter(RouterConfig);
+
 router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
-    Util.title(to.meta.title);
+    util.title(to.meta.title);
+
     let isLogin = Boolean(store.state.user.userName); //true用户已登录， false用户未登录
-    if (!isLogin && to.name !== 'login') {
-        next({name:'login'});
+    //未登入 且访问的不是登入页面
+    if (!isLogin) {
+        if (to.meta.auth === false) {
+            next();
+        }else{
+            store.dispatch('autoLogin', next);
+        }
+    }else{
+        if (to.name === 'login') {
+            next({ name: 'home' });
+        }else{
+            next();
+        }
     }
-    if (isLogin && to.name === 'login') {
-        next({name:'home'});
-    }
-    next();
 });
+
 router.afterEach(() => {
     iView.LoadingBar.finish();
     window.scrollTo(0, 0);
 });
+
+
 new Vue({
-    el: '#app',
+    el:'#app',
     router: router,
     store: store,
     render: h => h(App),
     mounted() {
-        this.$store.commit('menuInit');
+        this.$store.commit('menuInit',{sideMenu:appRouter,userMenu:userRouter.children});
     }
 });

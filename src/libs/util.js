@@ -22,15 +22,6 @@ util.ajax = axios.create({
 });
 
 
-util.autoLogin = function(){
-	return (Cookies.get('userName') && Cookies.get('password')) || false;
-}
-
-util.getUser = function(){
-	return {
-		userName: Cookies.get('userName')
-	}
-}
 
 
 

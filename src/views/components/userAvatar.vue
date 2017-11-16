@@ -22,9 +22,8 @@
             </a>
             <DropdownMenu slot="list" style="text-align:center">
                 <template v-for="item in userMenu"> 
-                    <DropdownItem :name="item.name"><Icon :type="item.meta.icon" style="padding-right: 4px;"></Icon>{{item.meta.title}}</DropdownItem>
+                    <DropdownItem :name="item.name" :divided="item.meta.divided"><Icon :type="item.meta.icon" style="padding-right: 4px;"></Icon>{{item.meta.title}}</DropdownItem>
                 </template>
-                <DropdownItem divided name="logout"><Icon type="log-out"></Icon> 退出登入</DropdownItem>
             </DropdownMenu>
         </Dropdown>
     </div>
@@ -48,21 +47,18 @@
 		methods:{
             toRouter(name){
                 if (name === 'user') {
-                    const userName =  this.userName;
                     this.$router.push({
                         name: 'user',
-                        params: { username: userName }
+                        params: { username: this.userName }
                     });
-                }
-                if (name === 'logout') {
+                }else if (name === 'logout') {
                     this.$store.commit('logout');
-                    this.$router.replace({ 
-                        name:'login' 
+                    this.$router.push({name: 'logout'});
+                }else{
+                    this.$router.push({
+                        name: name
                     });
                 }
-                this.$router.push({
-                    name: name
-                });
                 
             }
 		}
