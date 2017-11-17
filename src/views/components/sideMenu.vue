@@ -1,7 +1,5 @@
 <style type="text/css">
-    .ivu-menu-item-selected{
-        background: #ecf6fd;
-    }
+
 </style>
 <template>
 	<div class="layout-navigate">

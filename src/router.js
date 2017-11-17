@@ -15,7 +15,7 @@ export const appRouter = [
             },
         ]
     },
-
+ 
 ];
 // main组件路由
 export const userRouter = {

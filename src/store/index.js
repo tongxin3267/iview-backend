@@ -31,7 +31,7 @@ export default new Vuex.Store({
     actions: {
         autoLogin({commit}, next){
             if (cookies.get('_auth')) {
-                axios.get('./static/user.json').then(function (res) {
+                axios.get('/static/user.json').then(function (res) {
                     commit('login',res.data.data);
                     next();
                 }).catch(function (error) {
