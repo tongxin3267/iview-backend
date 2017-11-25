@@ -12,13 +12,11 @@ export default new Vuex.Store({
         userMenu: [], //个人菜单路由传入
     },
     mutations: {
-        login(state, user) {
+        login(state, user) { 
             state.user = user;
-            cookies.set('_auth',JSON.stringify(user));
         },
         logout(state) {
             state.user = {};
-            cookies.remove('_auth');
         },
         menuInit(state,{sideMenu,userMenu}) { 
             state.sideMenu = sideMenu;
@@ -29,18 +27,38 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        autoLogin({commit}, next){
-            if (cookies.get('_auth')) {
-                axios.get('/static/user.json').then(function (res) {
-                    commit('login',res.data.data);
-                    next();
-                }).catch(function (error) {
-                    commit('logout');
-                    next({name:'login'});
-                });   
-            }else{
+        login({commit}, data){
+            console.log('login')
+            axios.get('/user/login').then(function (res) {
+                commit('login',res.data);
+                next();
+            }).catch(function (error) {
+                commit('logout');
                 next({name:'login'});
-            }          
+            });          
+        },
+        logout({commit}) { 
+            console.log('logout')
+            axios.get('/user/logout').then(function (res) {
+                commit('logout');
+                next();
+            }).catch(function (error) {
+                commit('logout');
+                next();
+            });
+        },
+        checkLogin({commit}, next){
+            console.log('checkLogin')
+            axios.get('/user/login').then(function (res) {
+                console.log(res);
+                console.log(res.data);
+                commit('login',res.data);
+                next();
+            }).catch(function (error) {
+                console.log(error);
+                commit('logout');
+                next({name:'login'});
+            });          
         }
     }
 })

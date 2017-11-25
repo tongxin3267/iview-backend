@@ -15,6 +15,8 @@ Vue.use(iView);
 
 //注册axios为 $http
 Vue.prototype.$http = axios;
+axios.defaults.baseURL = 'http://localhost:100';
+axios.defaults.timeout = 3000;
 
 // 路由配置
 const RouterConfig = {
@@ -24,7 +26,7 @@ const RouterConfig = {
 const router = new VueRouter(RouterConfig);
 
 router.beforeEach((to, from, next) => {
-    console.log(to.name);
+    console.log('go router:' + to.name);
     iView.LoadingBar.start();
     util.title(to.meta.title);
 
@@ -34,7 +36,7 @@ router.beforeEach((to, from, next) => {
         if (to.meta.auth === false) {
             next();
         }else{
-            store.dispatch('autoLogin', next);
+            store.dispatch('checkLogin', next);
         }
     }else{
         if (to.name === 'login') {
