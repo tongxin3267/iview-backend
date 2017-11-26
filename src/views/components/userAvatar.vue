@@ -41,7 +41,7 @@
                 return this.$store.state.userMenu;
             },
             userName(){
-                return this.$store.state.user ? this.$store.state.user.userName : undefined;
+                return this.$store.state.user ? this.$store.state.user.username : undefined;
             }
         },
 		methods:{
