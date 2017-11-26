@@ -15,7 +15,7 @@ Vue.use(iView);
 
 //注册axios为 $http
 Vue.prototype.$http = axios;
-axios.defaults.baseURL = 'http://localhost:100';
+axios.defaults.baseURL = 'http://localhost:100'; 
 axios.defaults.timeout = 3000;
 
 // 路由配置
@@ -30,13 +30,13 @@ router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     util.title(to.meta.title);
 
-    let isLogin = Boolean(store.state.user.userName); //true用户已登录， false用户未登录
-    //未登入 且访问的不是登入页面
+    let isLogin = Boolean(store.state.user.username); //true用户已登录， false用户未登录
     if (!isLogin) {
         if (to.meta.auth === false) {
             next();
         }else{
-            store.dispatch('checkLogin', next);
+            next(false);
+            store.dispatch('login',next);
         }
     }else{
         if (to.name === 'login') {
