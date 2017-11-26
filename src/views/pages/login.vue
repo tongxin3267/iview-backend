@@ -13,7 +13,7 @@
                 <div class="login-content">
                    <Form ref="loginForm" :model="form" :rules="rules">
                         <FormItem prop="userName">
-                            <Input v-model="form.userName" placeholder="请输入用户名" size="large">
+                            <Input v-model="form.username" placeholder="请输入用户名" size="large">
                             </Input>
                         </FormItem>
                         <FormItem prop="password">
@@ -37,11 +37,11 @@ export default {
     data () {
         return {
             form: {
-                userName: '',
+                username: '',
                 password: ''
             },
             rules: {
-                userName: [
+                username: [
                     { required: true, message: '账号不能为空', trigger: 'blur' }
                 ],
                 password: [
@@ -54,10 +54,16 @@ export default {
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    let _userInfo = { userName:this.form.userName };
-                    this.$store.commit('login',_userInfo);
-                    this.$router.replace({
-                        name: 'home'
+                    this.$http.post('/user/login',this.form)
+                    .then((res)=>{
+                        console.log(res.data.username);
+                        this.$store.commit('login',res.data);
+                        this.$router.replace({
+                            name: 'home'
+                        });
+                    })
+                    .catch((error)=>{
+                        this.$Message.error(error.response.data.message);
                     });
                 }
             });
