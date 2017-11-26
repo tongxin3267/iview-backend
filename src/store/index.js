@@ -13,7 +13,7 @@ export default new Vuex.Store({
     },
     mutations: {
         login(state, user) { 
-            state.user = user;
+            state.user = user; 
         },
         logout(state) {
             state.user = {};
@@ -27,38 +27,23 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        login({commit}, data){
-            console.log('login')
-            axios.get('/user/login').then(function (res) {
+        login({commit},next){
+            axios.post('/user/login').then(function (res) {
                 commit('login',res.data);
                 next();
             }).catch(function (error) {
-                commit('logout');
-                next({name:'login'});
+                next({'name':'login'});
             });          
         },
-        logout({commit}) { 
+        logout({commit},next) { 
             console.log('logout')
-            axios.get('/user/logout').then(function (res) {
-                commit('logout');
+            axios.post('/user/logout').then(function (res) {
+
                 next();
             }).catch(function (error) {
-                commit('logout');
+
                 next();
             });
-        },
-        checkLogin({commit}, next){
-            console.log('checkLogin')
-            axios.get('/user/login').then(function (res) {
-                console.log(res);
-                console.log(res.data);
-                commit('login',res.data);
-                next();
-            }).catch(function (error) {
-                console.log(error);
-                commit('logout');
-                next({name:'login'});
-            });          
         }
     }
 })
