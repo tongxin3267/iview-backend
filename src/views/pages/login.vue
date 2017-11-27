@@ -56,7 +56,7 @@ export default {
                 if (valid) {
                     this.$http.post('/user/login',this.form)
                     .then((res)=>{
-                        console.log(res.data.username);
+                        console.log(res)
                         this.$store.commit('login',res.data);
                         this.$router.replace({
                             name: 'home'

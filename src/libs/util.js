@@ -1,25 +1,25 @@
 import axios from 'axios';
 import env from '../config/env';
-import Cookies from 'js-cookie';
+import cookies from 'js-cookie';
 
 let util = {
 
 };
+
 util.title = function(title) {
     title = title ? title + ' - Home' : 'iView-Backend';
     window.document.title = title;
 };
 
-const ajaxUrl = env === 'development' ?
-    'http://127.0.0.1:8888' :
-    env === 'production' ?
-    'https://www.url.com' :
-    'https://debug.url.com';
 
-util.ajax = axios.create({
-    baseURL: ajaxUrl,
-    timeout: 30000
+util.$http = axios.create({
+    baseURL: 'http://localhost:100',
+    timeout: 30000,
+    headers: {'Authorization': 'Bearer ' + cookies.get('token')}
 });
+
+
+
 
 
 
