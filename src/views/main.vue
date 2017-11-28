@@ -1,3 +1,4 @@
+
 <style scoped>
     .layout{
         background: #f5f7f9;
@@ -115,10 +116,17 @@
 <script>
     import sideMenu from './components/sideMenu.vue';
     import userAvatar from './components/userAvatar.vue';
+    import {appRouter,userRouter} from '../router';
     export default {
         components: {
             sideMenu,
             userAvatar
         }, 
+        mounted() {
+            this.$store.commit('menu',{sideMenu:appRouter,userMenu:userRouter.children,openSubmenu:null});
+            this.$http.post('/user/auth').then((res) => {
+                this.$store.state.user = res.data;
+            })
+        }
     };
 </script>

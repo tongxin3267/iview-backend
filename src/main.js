@@ -1,59 +1,20 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-import iView from 'iview';
-import cookies from 'js-cookie';
+import iView from 'iview'; 
 import App from './app.vue';
-import {routers,appRouter,userRouter} from './router';
-import util from './libs/util';
+import router from './router';
 import store from './store/index';
+import util from './libs/util';
+
 import 'iview/dist/styles/iview.css';
 
-
-Vue.use(VueRouter); 
 Vue.use(iView);
 
 //注册axios为 $http
-Vue.prototype.$http = util.$http;
-
-// 路由配置
-const RouterConfig = {
-    mode: 'history',
-    routes: routers
-};
-const router = new VueRouter(RouterConfig);
-
-router.beforeEach((to, from, next) => {
-    iView.LoadingBar.start();
-    util.title(to.meta.title);
-
-    let isLogin = Boolean(store.state.user); //true用户已登录， false用户未登录
-    if (!isLogin) {
-        if (to.meta.auth === false) {
-            next();
-        }else{
-            store.dispatch('checkAuth',next);
-        }
-    }else{
-        if (to.name === 'login') {
-            next({ name: 'home' });
-        }else{
-            next();
-        }
-    }
-});
-
-router.afterEach(() => {
-    iView.LoadingBar.finish();
-    window.scrollTo(0, 0); 
-});
-
+Vue.prototype.$http = util.axios;
 
 new Vue({
     el:'#app',
     router: router,
     store: store,
-    render: h => h(App),
-    mounted() {
-        this.$store.commit('menuInit',{sideMenu:appRouter,userMenu:userRouter.children});
-    }
+    render: h => h(App)
 });

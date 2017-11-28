@@ -10,7 +10,7 @@
     padding: 0 6px;
     font-size: 14px;
     line-height: 32px;
-    vertical-align: middle; 
+    vertical-align: middle;  
 }
 </style>
 <template>
@@ -38,10 +38,10 @@
         },
         computed: {
             userMenu() {
-                return this.$store.state.userMenu;
+                return this.$store.state.menu.userMenu;
             },
             userName(){
-                return this.$store.state.user ? this.$store.state.user.username : undefined;
+                return this.$store.state.user ? this.$store.state.user.username : 'undefined';
             }
         },
 		methods:{
@@ -54,7 +54,7 @@
                 }else if (name === 'logout') {
                     this.$store.commit('logout');
                     this.$router.push({
-                        name: 'logout'
+                        name: 'login'
                     });
                 }else{
                     this.$router.push({

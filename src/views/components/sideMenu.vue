@@ -2,7 +2,7 @@
 
 </style>
 <template>
-	<div class="layout-navigate">
+	<div class="layout-navigate"> 
         <Menu ref="sideMenu" :active-name="$route.name"  :open-names="openSubmenu" width="auto" @on-select="toRouter">
             <template v-for="item in sideMenu">
                 <Submenu :name="item.name" :key="item.path">
@@ -27,10 +27,10 @@
         },
         computed: {
             sideMenu() {
-                return this.$store.state.sideMenu;
+                return this.$store.state.menu.sideMenu;
             },
             openSubmenu(){
-                return this.$store.state.openSubmenu;
+                return this.$store.state.menu.openSubmenu;
             }
         },
 		methods:{
@@ -39,6 +39,12 @@
                     name: name
                 });
 			}
-		}
+		},
+        updated () {
+            this.$nextTick(() => {
+                this.$refs.sideMenu.updateOpened();
+                this.$refs.sideMenu.updateActiveName();
+            });
+        }
 	}
 </script>

@@ -1,44 +1,45 @@
 import Vue from 'vue'
 import Vuex from 'vuex';
-import axios from 'axios';
-import cookies from 'js-cookie';
+import util from '../libs/util';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
     	user: null, //获取用户信息 
-        token: cookies.get('token') || null,
-        sideMenu: [], //菜单路由传入
-        openSubmenu: [], //默认打开的菜单
-        userMenu: [], //个人菜单路由传入
+        token: util.cookies.get('token') || null,
+        menu:{
+            sideMenu: [], //菜单路由传入
+            userMenu: [], //个人菜单路由传入
+            openSubmenu: [], //默认打开的菜单
+        }
     },
     mutations: {
         login(state, user) { 
             state.user = user; 
-            cookies.set('token', user.token);
+            state.token = user.token;
+            util.cookies.set('token', user.token,{expires:3});
         },
         logout(state) {
             state.user = null;
-            cookies.remove('token');
+            state.token = null;
+            util.cookies.remove('token');
         },
-        menuInit(state,{sideMenu,userMenu}) { 
-            state.sideMenu = sideMenu;
-            state.userMenu = userMenu;
-            sideMenu.forEach((item, index) => {
-                state.openSubmenu.push(item.name);
-            })
+        menu(state,{sideMenu,userMenu,openSubmenu}) { 
+            state.menu.sideMenu = sideMenu;
+            state.menu.userMenu = userMenu;
+            if (!openSubmenu) {
+                sideMenu.forEach((item, index) => {
+                    state.menu.openSubmenu.push(item.name);
+                })
+            }else{
+                state.menu.openSubmenu = openSubmenu;
+            }
         }
     },
     actions: {
-        checkAuth({commit},next){
-            axios.post('/user/login').then(function (res) {
-                commit('login',res.data);
-                next();
-            }).catch(function (error) {
-                
-                commit('logout');
-                next({'name':'login'});
-            });          
+        getUser({commit}){
+  
         }
     }
 })

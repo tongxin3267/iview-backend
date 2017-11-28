@@ -12,7 +12,7 @@
                 </p>
                 <div class="login-content">
                    <Form ref="loginForm" :model="form" :rules="rules">
-                        <FormItem prop="userName">
+                        <FormItem prop="username">
                             <Input v-model="form.username" placeholder="请输入用户名" size="large">
                             </Input>
                         </FormItem>
@@ -54,17 +54,12 @@ export default {
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    this.$http.post('/user/login',this.form)
-                    .then((res)=>{
-                        console.log(res)
+                    this.$http.post('/user/login',this.form).then((res) => {
                         this.$store.commit('login',res.data);
                         this.$router.replace({
                             name: 'home'
                         });
                     })
-                    .catch((error)=>{
-                        this.$Message.error(error.response.data.message);
-                    });
                 }
             });
         }
