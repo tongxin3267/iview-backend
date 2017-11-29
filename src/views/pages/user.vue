@@ -9,7 +9,7 @@
 	<ul class="user-info">
 		<li>
 			<span class="user-info-key">头像</span>
-			<span class="user-info-value"><img src="https://i.loli.net/2017/08/21/599a521472424.jpg" style="width:80px;height:80px;border-radius:100%"></span>
+			<span class="user-info-value"><img src="http://www.qqzhi.com/uploadpic/2014-05-14/120216177.jpg" style="width:80px;height:80px;border-radius:100%"></span>
 		</li>
 		<li>
 			<span class="user-info-key">用户名</span>
@@ -18,7 +18,7 @@
 		<li>
 			<span class="user-info-key">邮箱</span>
 			<span class="user-info-value">{{user.email}}</span> 
-			<a href="javascript:;" class="user-info-edit" @click="editEmail">
+			<a href="javascript:;" class="user-info-edit" @click="handleEditEmail">
 				<Icon type="edit" class="user-edit"></Icon> <span> 修改</span>
 			</a>
 		</li>
@@ -33,8 +33,6 @@
     export default {
         data() {
             return {
-            	editEmailState: false,
-            	oldEmailVaule: null,
             };
         },
         computed:{
@@ -43,7 +41,8 @@
             }
 		},
 		methods:{
-			editEmail(){
+			handleEditEmail()
+			{
 				this.$Modal.confirm({
                     render: (h) => {
                         return h('Input', {
@@ -58,19 +57,22 @@
                                 }
                             }
                         })
-                    }
+                    },
+                    title: 'Title',
+                    loading : true,
+                    onOk: () => {
+                        this.$http.put('user/' + this.user.id,{
+							email : this.value
+						}).then((res)=>{
+							this.user.email = this.value;
+						    this.$Modal.remove();
+						    this.$Message.success('修改成功！');
+						}).catch((err)=>{
+						    this.$Modal.remove();
+						    this.$Message.error('修改失败！');
+						});
+                    },
                 })
-			},
-			handleEditEmail()
-			{
-				this.editEmailState = false;
-				this.$http.put('user/' + this.user.id,{
-					email : this.user.email
-				}).then((res)=>{
-				    this.$Message.success('修改成功！');
-				}).catch((err)=>{
-				    this.user.email = this.oldEmailVaule;
-				});
 			}
 		},
 		filters:{
