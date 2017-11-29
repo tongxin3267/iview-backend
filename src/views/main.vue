@@ -61,8 +61,13 @@
         right: 0;
     }
     .layout-content-main{
-        padding: 20px;
+        padding: 25px 20px;
         min-height: 200px;
+    }
+    .layout-content-main h2{
+        padding-bottom: 20px;
+        font-size: 18px;
+        font-weight: 400;
     }
     .layout-content-main:after{
         content: "";
@@ -102,6 +107,7 @@
                     </Col>
                     <Col span="20">
                         <div class="layout-content-main">
+                            <h2>{{$route.meta.title}}</h2>
                             <router-view></router-view>
                         </div>
                     </Col>
