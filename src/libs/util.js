@@ -1,9 +1,9 @@
 import env from '../config/env';
 import Vue from 'vue';
 import iView from 'iview';
+import cookies from 'js-cookie';
 import store from '../store/index';
 import axios from 'axios';
-import cookies from 'js-cookie';
 
 
 let util = {};
@@ -19,22 +19,29 @@ util.axios = axios.create({
     timeout: 30000,
 });
 util.axios.interceptors.request.use(config => {
-    config.headers.Authorization = 'Bearer ' +  (store.state.token || 'null');
+    if (store.state.token) {
+        config.headers.Authorization = 'Bearer ' +  store.state.token;
+    }
     return config;
 }, error => {
-    iView.Message.error('服务器未响应，请稍后再试！');
+    iView.Message.error('服务器未响应！');
     return Promise.reject(error);
 })
 util.axios.interceptors.response.use(data => { 
 	return data;
 }, error => {
-	iView.Message.error(error.response.data.message);
+    if (error.response.data.message) {
+        iView.Message.error(error.response.data.message);
+    }
     return Promise.reject(error.response.data);
 })
 
+util.upload = axios.create({
+    timeout: 30000,
+});
 
 util.formatDate = function(time,fmt){
-    let date = new Date(time);
+    let date = new Date(time*1000);
     let padLeftZero = function(str) {
         return ('00' + str).substr(str.length);
     }

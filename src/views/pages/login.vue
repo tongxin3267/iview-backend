@@ -3,7 +3,7 @@
         <div class="login-main">
             <a class="login-header">
                 <img alt="logo" src="https://t.alipayobjects.com/images/rmsweb/T1B9hfXcdvXXXXXXXX.svg">
-                <span>一个 UI 设计语言</span>
+                <span>一个 UI 设计语言</span> 
             </a>
             <Card  :padding="0" :dis-hover="true">
                 <p slot="title">
@@ -13,7 +13,7 @@
                 <div class="login-content">
                    <Form ref="loginForm" :model="form" :rules="rules">
                         <FormItem prop="username">
-                            <Input v-model="form.username" placeholder="请输入用户名" size="large">
+                            <Input v-model="form.email" placeholder="请输入邮箱" size="large">
                             </Input>
                         </FormItem>
                         <FormItem prop="password">
@@ -32,17 +32,16 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie';
 export default {
     data () {
         return {
             form: {
-                username: '',
+                email: '',
                 password: ''
             },
             rules: {
-                username: [
-                    { required: true, message: '账号不能为空', trigger: 'blur' }
+                email: [
+                    { required: true, message: '邮箱不能为空', trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '密码不能为空', trigger: 'blur' }
@@ -54,15 +53,18 @@ export default {
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    this.$http.post('/user/login',this.form).then((res) => {
-                        this.$store.commit('login',res.data);
+                    this.$store.dispatch('loginByEamil',this.form).then(() => {
+                        let _path = this.$route.query.redirect || '/home' ;
                         this.$router.replace({
-                            name: 'home'
+                            path: _path
                         });
-                    })
+                    }).catch(error=>{})
                 }
             });
         }
+    },
+    mounted() {
+        
     }
 };
 </script>

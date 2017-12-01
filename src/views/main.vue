@@ -94,7 +94,7 @@
                     <img alt="logo" src="https://t.alipayobjects.com/images/rmsweb/T1B9hfXcdvXXXXXXXX.svg">
                     <span>iView-Backend</span>
                 </a>
-                <userAvatar></userAvatar>
+                <userMenu></userMenu>
             </div>
         </header>
         <div class="layout-wrap">
@@ -121,18 +121,28 @@
 </template>
 <script>
     import sideMenu from './components/sideMenu.vue';
-    import userAvatar from './components/userAvatar.vue';
+    import userMenu from './components/userMenu.vue';
     import {appRouter,userRouter} from '../router';
     export default {
         components: {
             sideMenu,
-            userAvatar
+            userMenu
         }, 
         mounted() {
+            if (!this.$store.state.user) {
+                this.$store.dispatch('loginByCookie').then(() => {
+                }).catch(error=>{
+                    this.$router.replace({
+                        name: 'login'
+                    });
+                });
+            }
+            
+            if (!this.$store.state.upConfig) {
+                this.$store.dispatch('getUpConfig');
+            }
+
             this.$store.commit('menu',{sideMenu:appRouter,userMenu:userRouter.children,openSubmenu:null});
-            this.$http.post('/user/auth').then((res) => {
-                this.$store.state.user = res.data;
-            })
         }
     };
 </script>

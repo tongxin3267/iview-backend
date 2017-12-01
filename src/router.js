@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import iView from 'iview';
 import VueRouter from 'vue-router';
+
 import Main from './views/main.vue';
 import store from './store/index';
 import util from './libs/util';
@@ -25,13 +26,13 @@ export const appRouter = [{
         }
     }, ]
 }, ];
-// user组件路由
+// 用户路由
 export const userRouter = {
-    path: '/use',
+    path: '/',
     component: Main,
     redirect: '/home',
     children: [{
-        path: '/user/:username',
+        path: '/user',
         name: 'user',
         meta: {
             title: '个人中心',
@@ -41,25 +42,16 @@ export const userRouter = {
             require(['./views/pages/user.vue'], resolve);
         }
     }, {
-        path: '/user/update-password',
-        name: 'update-password',
+        path: '/user/password',
+        name: 'password',
         meta: {
             title: '修改密码',
             icon: 'gear-a'
         },
         component: resolve => {
-            require(['./views/pages/updatePassword.vue'], resolve);
+            require(['./views/pages/password.vue'], resolve);
         }
-    }, {
-        path: '/user/logout',
-        name: 'logout',
-        meta: {
-            title: '退出登入',
-            icon: 'log-out',
-            divided: true
-        },
-        redirect: '/login',
-    }, ]
+    }]
 };
 export const commonRouter = [
     {
@@ -114,7 +106,7 @@ router.beforeEach((to, from, next) => {
 
     let isLogin = Boolean(store.state.token); //true用户已登录， false用户未登录
     if (!isLogin && to.meta.auth !== false) {
-        next({name: 'login'});
+        next({name: 'login', query: {redirect: to.fullPath}});
     } else {
         next();
     }

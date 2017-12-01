@@ -40,7 +40,7 @@
                 });
 			}
 		},
-        updated () {
+        mounted() {
             this.$nextTick(() => {
                 this.$refs.sideMenu.updateOpened();
                 this.$refs.sideMenu.updateActiveName();

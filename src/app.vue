@@ -18,5 +18,7 @@
                 
             };
         },
+        mounted() {
+        }
     };
 </script>
