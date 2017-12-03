@@ -19,7 +19,7 @@
 			<span class="user-info-key">头像</span>
 			<span class="user-info-value">
 				<div class="upload-avatar-box">
-					<img class="upload-avatar-img" :src="user.avatar ? user.avatar : ''">
+					<img class="upload-avatar-img" :src="user.avatar">
 					<div class="upload-avatar-cover" @click="handlePick">
 						<input style="display:none" type="file" :accept="accepts" ref="pick" @change="handleUploadAvatar">
 						<Icon type="camera" size="20" color="#fff"></Icon>
@@ -82,25 +82,21 @@
 			},
 			handleUploadAvatar(event)
 			{
-				console.log(this.user);
 				let file = event.target.files[0];
 				if (file) {
-					if (file.size > this.maxSize) {
-                        return this.$Message.error('图片大小超出2M限制');
-                    }
-                    if (this.accepts.indexOf(file.type) === -1) {
-                    	return this.$Message.error('图片格式不支持');
-                    }
-                    this.$store.dispatch('upload',file).then( res => {
-                    	let _url = 'user/' + this.state.user.id;
-                    	console.log(res)
-                    	this.$http.put(_url,{
-                    		'avatar':res
+                    this.$store.dispatch('upload',{file:file,maxSize:this.maxSize,accepts:this.accepts}).then( res => {
+                    	res += '?imageView2/1/w/100/h/100/'
+                    	this.$http.put('user/' + this.user.id,{
+                    		avatar:res
                     	}).then(() =>{
                     		this.user.avatar = res;
                     		this.$Message.success('上传成功');
-                    	}).catch(e=>{})
-                    }).catch(e=>{})
+                    	}).catch(e=>{
+                    		this.$Message.error('保存失败');
+                    	})	
+                    }).catch(msg=>{
+                    	this.$Message.error(msg);
+                    })
                 }
 			},
 			handleNickname()

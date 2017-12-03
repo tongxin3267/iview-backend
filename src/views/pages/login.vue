@@ -12,7 +12,7 @@
                 </p>
                 <div class="login-content">
                    <Form ref="loginForm" :model="form" :rules="rules">
-                        <FormItem prop="username">
+                        <FormItem prop="email">
                             <Input v-model="form.email" placeholder="请输入邮箱" size="large">
                             </Input>
                         </FormItem>

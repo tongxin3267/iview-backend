@@ -129,7 +129,7 @@
             userMenu
         }, 
         mounted() {
-            if (!this.$store.state.user) {
+            if (!this.$store.state.user.id) {
                 this.$store.dispatch('loginByCookie').then(() => {
                 }).catch(error=>{
                     this.$router.replace({

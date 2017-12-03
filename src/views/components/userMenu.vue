@@ -17,8 +17,8 @@
     <div class="user-avatar">
     	<Dropdown placement="bottom-end" @on-click="toRouter">
             <a href="javascript:;">
-                <Avatar icon="person" style="vertical-align: middle;" />
-                <span class="user-avatar-name">{{userInfo}}</span>
+                <Avatar :src="avatar ? avatar : ''" :icon="avatar ? '' : 'person'" style="vertical-align: middle;" />
+                <span class="user-avatar-name">{{nickname ? nickname : '未登入'}}</span>
             </a>
             <DropdownMenu slot="list" style="text-align:center">
                 <template v-for="item in userMenu"> 
@@ -38,11 +38,14 @@
             };
         },
         computed: {
+            avatar(){
+                return this.$store.state.user.avatar;
+            },
             userMenu() {
                 return this.$store.state.menu.userMenu;
             },
-            userInfo(){
-                return this.$store.state.user ? this.$store.state.user.nickname : '未登入';
+            nickname(){
+                return this.$store.state.user.nickname;
             }
         },
 		methods:{
@@ -58,6 +61,8 @@
                     }); 
                 }
             }
-		}
+		},
+        mounted(){
+        }
 	}
 </script>

@@ -6,7 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({ 
     state: {
-    	user: null, //用户信息 
+    	user: {}, //用户信息 
         token: util.cookies.get('token') || null, // token
         upConfig: null, // 上传的配置
         menu:{
@@ -75,10 +75,16 @@ export default new Vuex.Store({
             }).catch(() => {
             });
         },
-        upload({commit},file){
+        upload({commit},{file,maxSize,accepts}){
             return  new Promise((resolve,reject)=>{
                 if (!this.state.upConfig) {
-                    reject();
+                    reject('获取上传配置失败');
+                }
+                if (maxSize && maxSize < file.size) {
+                    reject('文件大小超出限制');
+                }
+                if (accepts && accepts.indexOf(file.type) === -1) {
+                    reject('图片格式不支持');
                 }
                 let server = this.state.upConfig.server,
                     token = this.state.upConfig.token,
@@ -87,9 +93,9 @@ export default new Vuex.Store({
                     formData.append('file',file);
                     formData.append('token',token);
                 util.upload.post(server,formData).then(res => {
-                    resolve({url:domainUrl + '/' + res.data.fkey});
+                    resolve(domainUrl + res.data.fkey);
                 }).catch(error => {
-                    reject(error);
+                    reject('上传至云服务器失败');
                 });
             })
         }
