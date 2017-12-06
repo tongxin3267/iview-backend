@@ -129,20 +129,22 @@
             userMenu
         }, 
         mounted() {
-            if (!this.$store.state.user.id) {
-                this.$store.dispatch('loginByCookie').then(() => {
+            if (!this.$store.state.user.profile.id) {
+                this.$http.post('user/auth').then(res => {
+                    this.$store.dispatch('loginByCookie',res.data);
                 }).catch(error=>{
+                    this.$store.dispatch('logout');
                     this.$router.replace({
                         name: 'login'
                     });
                 });
             }
-            
-            if (!this.$store.state.upConfig) {
-                this.$store.dispatch('getUpConfig');
+            if (!this.$store.state.user.config) {
+                this.$http.post('attachment/token').then(res => {
+                    this.$store.dispatch('getConfig',res.data);
+                })
             }
-
-            this.$store.commit('menu',{sideMenu:appRouter,userMenu:userRouter.children,openSubmenu:null});
+            this.$store.dispatch('menuInit',{sideMenu:appRouter,userMenu:userRouter.children,openSubmenu:null});
         }
     };
 </script>

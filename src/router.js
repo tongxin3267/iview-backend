@@ -104,7 +104,7 @@ router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     util.title(to.meta.title);
 
-    let isLogin = Boolean(store.state.token); //true用户已登录， false用户未登录
+    let isLogin = Boolean(store.state.user.token); //true用户已登录， false用户未登录
     if (!isLogin && to.meta.auth !== false) {
         next({name: 'login', query: {redirect: to.fullPath}});
     } else {
