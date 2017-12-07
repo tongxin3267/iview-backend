@@ -1,6 +1,3 @@
-<style type="text/css">
-
-</style>
 <template>
 	<div class="layout-navigate"> 
         <Menu ref="sideMenu" :active-name="$route.name"  :open-names="openSubmenu" width="auto" @on-select="toRouter">
@@ -22,16 +19,13 @@
 	export default {
         data () {
             return {
-                iconSize: 14,
+
             };
         },
-        computed: {
-            sideMenu() {
-                return this.$store.state.menu.sideMenu;
-            },
-            openSubmenu(){
-                return this.$store.state.menu.openSubmenu;
-            }
+        props: {
+            openSubmenu: Array,
+            sideMenu: Array,
+            iconSize: Number
         },
 		methods:{
 			toRouter(name){

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import iView from 'iview'; 
 import App from './app.vue';
-import router from './router';
+import router from './router/index';
 import store from './store/index'; 
 import util from './libs/util';
 
@@ -11,6 +11,7 @@ Vue.use(iView);
 
 //注册axios为 $http
 Vue.prototype.$http = util.axios;
+Vue.prototype.$upload = util.upload;
 
 new Vue({
     el:'#app',

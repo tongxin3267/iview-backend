@@ -8,10 +8,11 @@
 
 	.upload-avatar-box{position:relative;width: 64px;height:64px;overflow: hidden;border-radius: 4px;}
 	.upload-avatar-img{width: 64px;height:64px;}
-	.upload-avatar-cover{display: none; position: absolute; top: 0; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,.6);line-height: 64px;text-align: center; } 
+	.upload-avatar-cover{display: none; position: absolute; top: 0; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,.5);line-height: 64px;text-align: center; } 
 	.upload-avatar-box:hover .upload-avatar-cover{
         display: block;
     }
+    .user-upload-label{display: block;position: absolute;left:0;top:0;width: 100%;height:100%;}
 </style>
 <template>
 	<ul class="user-info">
@@ -20,8 +21,9 @@
 			<span class="user-info-value">
 				<div class="upload-avatar-box">
 					<img class="upload-avatar-img" :src="user.avatar">
-					<div class="upload-avatar-cover" @click="handlePick">
-						<input style="display:none" type="file" :accept="accepts" ref="pick" @change="handleUploadAvatar">
+					<div class="upload-avatar-cover">
+						<label class="user-upload-label" for="user-upload"></label>
+						<input style="display:none" type="file" accept="image/jpeg,image/jpg,image/png,image/gif" ref="pick" @change="handleUploadAvatar" id="user-upload">
 						<Icon type="camera" size="20" color="#fff"></Icon>
 					</div>
 				</div>
@@ -58,33 +60,18 @@
 </template>
 <script>
 	import util from './../../libs/util';
-	import { mapState } from 'Vuex';
     export default {
-        props : {
-            accepts : { 
-                type : String,
-                default: 'image/jpeg,image/jpg,image/png,image/gif'
-            },
-            maxSize : {
-                type : Number,
-                default : 1024 *1024 *2 
-            }, 
-        },
         computed:{
         	user(){
-        		return this.$store.state.user;
+        		return this.$store.state.user.profile;
         	},
         },
 		methods:{
-			handlePick()
-			{
-				this.$refs.pick.dispatchEvent(new MouseEvent('click'));
-			},
 			handleUploadAvatar(event)
 			{
 				let file = event.target.files[0];
 				if (file) {
-                    this.$store.dispatch('upload',{file:file,maxSize:this.maxSize,accepts:this.accepts}).then( res => {
+                    this.$upload(file,{maxSize:this.maxSize,accepts:this.accepts}).then( res => {
                     	res += '?imageView2/1/w/100/h/100/'
                     	this.$http.put('user/' + this.user.id,{
                     		avatar:res

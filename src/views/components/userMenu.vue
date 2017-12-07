@@ -17,8 +17,8 @@
     <div class="user-avatar">
     	<Dropdown placement="bottom-end" @on-click="toRouter">
             <a href="javascript:;">
-                <Avatar :src="avatar ? avatar : ''" :icon="avatar ? '' : 'person'" style="vertical-align: middle;" />
-                <span class="user-avatar-name">{{nickname ? nickname : '未登入'}}</span>
+                <Avatar :src="profile.avatar ? profile.avatar : ''" :icon="profile.avatar ? '' : 'person'" style="vertical-align: middle;" />
+                <span class="user-avatar-name">{{profile.nickname ? profile.nickname : '未登入'}}</span>
             </a>
             <DropdownMenu slot="list" style="text-align:center">
                 <template v-for="item in userMenu"> 
@@ -37,28 +37,17 @@
 
             };
         },
-        computed: {
-            avatar(){
-                return this.$store.state.user.avatar;
-            },
-            userMenu() {
-                return this.$store.state.menu.userMenu;
-            },
-            nickname(){
-                return this.$store.state.user.nickname;
-            }
+        props: {
+            profile: Object,
+            userMenu: Array
         },
 		methods:{
             toRouter(name){
                 if (name ==='logout') {
                     this.$store.dispatch('logout');
-                    this.$router.replace({
-                        name: 'login'
-                    });
+                    this.$router.replace({ name: 'login' });
                 }else{
-                    this.$router.push({
-                        name: name
-                    }); 
+                    this.$router.push({ name: name }); 
                 }
             }
 		},

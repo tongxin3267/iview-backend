@@ -1,4 +1,3 @@
-
 <style scoped>
     .layout{
         background: #f5f7f9;
@@ -94,7 +93,7 @@
                     <img alt="logo" src="https://t.alipayobjects.com/images/rmsweb/T1B9hfXcdvXXXXXXXX.svg">
                     <span>iView-Backend</span>
                 </a>
-                <userMenu></userMenu>
+                <userMenu :profile="profile" :userMenu="userMenu"></userMenu>
             </div>
         </header>
         <div class="layout-wrap">
@@ -102,7 +101,7 @@
                 <Row>
                     <Col span="4">
                         <div class="layout-navigate">
-                            <sideMenu></sideMenu>
+                            <sideMenu :sideMenu="sideMenu" :openSubmenu="openSubmenu" :iconSize="14"></sideMenu>
                         </div>
                     </Col>
                     <Col span="20">
@@ -122,26 +121,38 @@
 <script>
     import sideMenu from './components/sideMenu.vue';
     import userMenu from './components/userMenu.vue';
-    import {appRouter,userRouter} from '../router';
+    import {appRouter,userRouter} from '../router/index';
     export default {
         components: {
             sideMenu,
             userMenu
         }, 
+        computed: {
+            sideMenu() {
+                return this.$store.state.menu.sideMenu;
+            },
+            openSubmenu(){
+                return this.$store.state.menu.openSubmenu;
+            },
+            userMenu() {
+                return this.$store.state.menu.userMenu;
+            },
+            profile(){
+                return this.$store.state.user.profile;
+            }
+        },
         mounted() {
             if (!this.$store.state.user.profile.id) {
-                this.$http.post('user/auth').then(res => {
-                    this.$store.dispatch('loginByCookie',res.data);
+                this.$http.post('user/profile').then(res => {
+                    this.$store.dispatch('profile',res.data);
                 }).catch(error=>{
                     this.$store.dispatch('logout');
-                    this.$router.replace({
-                        name: 'login'
-                    });
+                    this.$router.replace({ name: 'login' });
                 });
             }
-            if (!this.$store.state.user.config) {
-                this.$http.post('attachment/token').then(res => {
-                    this.$store.dispatch('getConfig',res.data);
+            if (JSON.stringify(this.$store.state.user.config) == "{}") {
+                this.$http.post('user/config').then(res => {
+                    this.$store.dispatch('config',res.data);
                 })
             }
             this.$store.dispatch('menuInit',{sideMenu:appRouter,userMenu:userRouter.children,openSubmenu:null});

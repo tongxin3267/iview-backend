@@ -6,7 +6,7 @@
         <FormItem label="新密码" prop="newPassword">
             <Input type="password" v-model="form.newPassword" style="width:300px"></Input>
         </FormItem>
-        <FormItem label="再次输入" prop="repeatPassword">
+        <FormItem label="确认输入" prop="repeatPassword">
             <Input type="password" v-model="form.repeatPassword" style="width:300px"></Input>
         </FormItem>
         <FormItem label="">
@@ -18,6 +18,20 @@
 <script>
     export default {
         data() {
+            const validatePassword = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('密码不能为空'));
+                } else if(value.length < 6  || value.length > 30){
+                    callback(new Error('密码长度必须为4-30位'));
+                }else{
+                    if (value === this.form.repeatPassword) {
+                        if (this.form.newPassword !== this.form.repeatPassword) {
+                            callback(new Error('两次输入的密码不一致'));
+                        }
+                    }
+                    callback();
+                }
+            };
             return {
                 loading: false,
                 form: {
@@ -27,13 +41,13 @@
                 },
                 rules: {
                     password: [
-                        { required: true, message: '旧密码不能为空', trigger: 'blur' }
+                        { validator: validatePassword, trigger: 'blur' }
                     ],
                     newPassword: [
-                        { required: true, message: '新密码不能为空', trigger: 'blur' }
+                        { validator: validatePassword, trigger: 'blur'  }
                     ],
                     repeatPassword:[
-                        { required: true, message: '再次输入不能为空', trigger: 'blur' }
+                        { validator: validatePassword, trigger: 'blur'  }
                     ]
                 }
             };
@@ -46,9 +60,7 @@
                         this.$http.post('user/password',this.form).then((res)=>{
                             this.loading = false;
                             this.$Message.success('修改成功！');
-                            this.$router.push({
-                                name: 'user'
-                            });
+                            this.$router.push({ name: 'user' });
                         }).catch((err)=>{
                             this.loading = false;
                         });

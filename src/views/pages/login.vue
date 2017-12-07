@@ -53,14 +53,11 @@ export default {
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    this.$http.post('user/login',this.form).then(res => {
+                    this.$http.post('user/connect',this.form).then(res => {
+                        this.$store.dispatch('login',res.data);
                         let _path = this.$route.query.redirect || '/home' ;
-                        this.$router.replace({
-                            path: _path
-                        });
-                        this.$Message.success('登入成功')
-                    }).catch(error => {
-                        this.$Message.error(error.message)
+                        this.$router.replace({ path: _path });
+                        this.$Message.success('登入成功');
                     })
                 }
             });

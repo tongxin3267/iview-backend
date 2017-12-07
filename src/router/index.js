@@ -2,9 +2,9 @@ import Vue from 'vue';
 import iView from 'iview';
 import VueRouter from 'vue-router';
 
-import Main from './views/main.vue';
-import store from './store/index';
-import util from './libs/util';
+import Main from '../views/main.vue';
+import store from '../store/index';
+import util from '../libs/util';
 // siderMenu 路由
 export const appRouter = [{
     path: '/panel',
@@ -22,7 +22,7 @@ export const appRouter = [{
             icon: 'ios-navigate'
         },
         component: resolve => {
-            require(['./views/pages/home.vue'], resolve);
+            require(['../views/pages/home.vue'], resolve);
         }
     }, ]
 }, ];
@@ -39,7 +39,7 @@ export const userRouter = {
             icon: 'person'
         },
         component: resolve => {
-            require(['./views/pages/user.vue'], resolve);
+            require(['../views/pages/user.vue'], resolve);
         }
     }, {
         path: '/user/password',
@@ -49,7 +49,7 @@ export const userRouter = {
             icon: 'gear-a'
         },
         component: resolve => {
-            require(['./views/pages/password.vue'], resolve);
+            require(['../views/pages/password.vue'], resolve);
         }
     }]
 };
@@ -65,14 +65,14 @@ export const commonRouter = [
             auth: false
         },
         beforeEnter: (to, from, next) => {
-            if (store.state.token) {
+            if (store.state.user.token) {
                 next({name:'home'});
             }else{
                 next()
             }
         },
         component: resolve => {
-            require(['./views/pages/login.vue'], resolve);
+            require(['../views/pages/login.vue'], resolve);
         }
     }, {
         path: '*',
@@ -82,7 +82,7 @@ export const commonRouter = [
             auth: false
         },
         component: resolve => {
-            require(['./views/pages/404.vue'], resolve);
+            require(['../views/pages/404.vue'], resolve);
         }
     }
 ];
