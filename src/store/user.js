@@ -27,7 +27,7 @@ export default {
             commit('token',data.token);
         },
         logout({commit}){
-            commit('profile',null);
+            commit('profile',{});
             commit('token',null);
         },
         profile({commit},data){
