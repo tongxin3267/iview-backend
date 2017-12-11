@@ -10,7 +10,7 @@
             <Page 
                 :total="meta.totalCount" 
                 :page-size="meta.perPage" 
-                :page-size-opts="[20, 50]"
+                :page-size-opts="[10, 20, 50]"
                 show-sizer 
                 show-total
                 @on-change="changePage" 
@@ -154,8 +154,8 @@
                 size = size ? size : this.meta.perPage;
                 let _url =  'user?page=' + page + '&per-page= ' + size;
                 this.$http.get(_url).then(res => {
-                    this.data = res.data.items;
-                    this.meta = res.data._meta;
+                    this.data = res.data.items; //更新数据
+                    this.meta = res.data._meta; //更新分页数据
                     this.loading = false
                 })
             },

@@ -128,6 +128,9 @@
             userMenu
         }, 
         computed: {
+            apiLoading(){
+                return this.$store.state.apiLoading;
+            },
             sideMenu() {
                 return this.$store.state.menu.sideMenu;
             },
@@ -138,23 +141,15 @@
                 return this.$store.state.menu.userMenu;
             },
             profile(){
-                return this.$store.state.user.profile;
+                return this.$store.state.userInfo;
             }
         },
         mounted() {
-            if (!this.$store.state.user.profile.id) {
-                this.$http.post('user/profile').then(res => {
-                    this.$store.dispatch('profile',res.data);
-                }).catch(error=>{
-                    this.$store.dispatch('logout');
-                    this.$router.replace({ name: 'login' });
-                });
-            }
-            if (JSON.stringify(this.$store.state.user.config) == "{}") {
-                this.$http.post('user/config').then(res => {
-                    this.$store.dispatch('config',res.data);
-                })
-            }
+            console.log('getUploadConfig')
+            this.$store.dispatch('getUserInfo',res => {
+                this.$router.replace({name:'login'})
+            });
+            this.$store.dispatch('getUploadConfig');
             this.$store.dispatch('menuInit',{sideMenu:appRouter,userMenu:userRouter.children,openSubmenu:null});
         }
     };

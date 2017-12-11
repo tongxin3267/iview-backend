@@ -23,7 +23,7 @@ util.axios = axios.create({
 });
 //axios拦截器
 util.axios.interceptors.request.use(config => {
-    if (store.state.user.token) {
+    if (store.state.token) {
         config.headers.Authorization = 'Bearer ' +  store.state.user.token;
     }
     return config;
@@ -34,16 +34,16 @@ util.axios.interceptors.request.use(config => {
 util.axios.interceptors.response.use(data => { 
 	return data;
 }, error => {
-    if (error.response.data.message) {
+    if (error.response && error.response.data && error.response.data.message) {
         iView.Message.error(error.response.data.message);
     }
-    return Promise.reject(error.response.data);
+    return Promise.reject(error.response);
 })
 //上传方法 需要后台获取上传配置
 //['upload'=>['server'=>'上传服务器地址','token'=>'令牌','domain'=>'网址前缀']]
 util.upload = function(file){
     return  new Promise((resolve,reject)=>{
-        let config =  store.state.user.config.upload;
+        let config =  store.state.config.upload;
         if (!config) {
             reject('获取上传配置失败');
         }

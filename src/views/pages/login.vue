@@ -53,12 +53,13 @@ export default {
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    this.$http.post('user/connect',this.form).then(res => {
-                        this.$store.dispatch('login',res.data);
-                        let _path = this.$route.query.redirect || '/home' ;
-                        this.$router.replace({ path: _path });
-                        this.$Message.success('登入成功');
-                    })
+                    this.$store.dispatch('loginByEamil',{data:this.form,cb:res => {
+                        let _path = this.$route.query.redirect || '/home'
+                        this.$router.replace({ path: _path })
+                        this.$Message.success('登入成功')
+                    },errorCb:error=>{
+
+                    }})
                 }
             });
         }

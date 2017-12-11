@@ -75,7 +75,7 @@ export const commonRouter = [
         name: 'login',
         meta: {title: '登入',auth: false},
         beforeEnter: (to, from, next) => {
-            if (store.state.user.token) {
+            if (store.state.token) {
                 next({name:'home'});
             }else{
                 next()
@@ -107,7 +107,7 @@ router.beforeEach((to, from, next) => {
     iView.LoadingBar.start();
     util.title(to.meta.title);
 
-    let isLogin = Boolean(store.state.user.token); //true用户已登录， false用户未登录
+    let isLogin = Boolean(store.state.token); //true用户已登录， false用户未登录
     if (!isLogin && to.meta.auth !== false) {
         next({name: 'login', query: {redirect: to.fullPath}});
     } else {

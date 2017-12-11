@@ -63,7 +63,7 @@
     export default {
         computed:{
         	user(){
-        		return this.$store.state.user.profile;
+        		return this.$store.state.profile;
         	},
         },
 		methods:{
