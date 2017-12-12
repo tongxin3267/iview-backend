@@ -93,7 +93,7 @@
                     <img alt="logo" src="https://t.alipayobjects.com/images/rmsweb/T1B9hfXcdvXXXXXXXX.svg">
                     <span>iView-Backend</span>
                 </a>
-                <userMenu :profile="profile" :userMenu="userMenu"></userMenu>
+                <userDropdown :user="user" :dropdownItem="dropdownItem"></userDropdown>
             </div>
         </header>
         <div class="layout-wrap">
@@ -120,37 +120,39 @@
 </template>
 <script>
     import sideMenu from './components/sideMenu.vue';
-    import userMenu from './components/userMenu.vue';
+    import userDropdown from './components/userDropdown.vue';
     import {appRouter,userRouter} from '../router/index';
+    import {mapState,mapActions} from 'vuex';
     export default {
         components: {
             sideMenu,
-            userMenu
+            userDropdown
         }, 
         computed: {
-            apiLoading(){
-                return this.$store.state.apiLoading;
-            },
-            sideMenu() {
-                return this.$store.state.menu.sideMenu;
-            },
-            openSubmenu(){
-                return this.$store.state.menu.openSubmenu;
-            },
-            userMenu() {
-                return this.$store.state.menu.userMenu;
-            },
-            profile(){
-                return this.$store.state.userInfo;
-            }
+            ...mapState({
+                dropdownItem:state => state.app.dropdownItem,
+                sideMenu:state => state.app.sideMenu,
+                openSubmenu:state => state.app.openSubmenu,
+                user:state => state.auth.identity,
+            }),
         },
-        mounted() {
-            console.log('getUploadConfig')
-            this.$store.dispatch('getUserInfo',res => {
+        methods: {
+            ...mapActions([
+                'menuInit',
+                'getIdentity',
+                'getUploadConfig'
+            ]),
+        },
+        created () {
+            this.getIdentity().then(()=>{
+                //成功拉取身份信息
+            }).catch(error=> {
+                this.$Message.error(error.message)
+                this.$store.dispatch('logout')
                 this.$router.replace({name:'login'})
-            });
-            this.$store.dispatch('getUploadConfig');
-            this.$store.dispatch('menuInit',{sideMenu:appRouter,userMenu:userRouter.children,openSubmenu:null});
+            }) 
+            this.menuInit({dropdownItem:userRouter.children,sideMenu:appRouter,openSubmenu:null})
+            this.getUploadConfig()
         }
     };
 </script>

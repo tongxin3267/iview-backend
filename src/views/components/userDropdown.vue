@@ -17,11 +17,15 @@
     <div class="user-avatar">
     	<Dropdown placement="bottom-end" @on-click="toRouter">
             <a href="javascript:;">
-                <Avatar :src="profile.avatar ? profile.avatar : ''" :icon="profile.avatar ? '' : 'person'" style="vertical-align: middle;" />
-                <span class="user-avatar-name">{{profile.nickname ? profile.nickname : '未登入'}}</span>
+                <Avatar 
+                    :src="user.avatar ? user.avatar : ''" 
+                    :icon="user.avatar ? '' : 'person'" 
+                    style="vertical-align: middle;" 
+                />
+                <span class="user-avatar-name">{{user.nickname ? user.nickname : 'loading...'}}</span>
             </a>
             <DropdownMenu slot="list" style="text-align:center">
-                <template v-for="item in userMenu"> 
+                <template v-for="item in dropdownItem"> 
                     <DropdownItem :name="item.name"><Icon :type="item.meta.icon" style="padding-right: 4px;"></Icon>{{item.meta.title}}</DropdownItem>
                 </template>
                 <DropdownItem divided name="logout"><Icon type="log-out" style="padding-right: 4px;"></Icon>退出登入</DropdownItem>
@@ -30,7 +34,6 @@
     </div>
 </template>
 <script type="text/javascript">
-	import Vue from 'vue';
 	export default {
         data () {
             return {
@@ -38,8 +41,8 @@
             };
         },
         props: {
-            profile: Object,
-            userMenu: Array
+            user:Object,
+            dropdownItem: Array
         },
 		methods:{
             toRouter(name){
@@ -51,7 +54,5 @@
                 }
             }
 		},
-        mounted(){
-        }
 	}
 </script>

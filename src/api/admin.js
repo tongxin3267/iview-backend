@@ -2,14 +2,8 @@ import util from '../libs/util';
 
 const _url = 'admin';
 export default {
-	login(data){
-		return util.axios.post(_url + '/connect',data);
-	},
-	config(){
-		console.log(5);
-		return util.axios.get(_url + '/config');
-	},
-	all(page,prePage){
+	getItems(page,prePage){
+		console.log(prePage)
 		let params = {};
 		if(page){
 			params['page'] = page;
@@ -17,6 +11,7 @@ export default {
 		if (prePage) {
 			params['pre-page'] = prePage;
 		}
+		console.log(params)
 		return util.axios.get(_url,{params:params});
 	},
 	view(id){
@@ -30,5 +25,11 @@ export default {
 	},
 	remove(id){
 		return util.axios.delete(_url + '/' + id);
+	},
+	updatePassword(data){
+		return util.axios.put(_url + '/update-password', data);
+	},
+	resetPassword(id,data){
+		return util.axios.put(_url + '/' + id, data);
 	}
 }

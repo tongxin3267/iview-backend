@@ -13,17 +13,17 @@
         display: block;
     }
     .user-upload-label{display: block;position: absolute;left:0;top:0;width: 100%;height:100%;}
-</style>
+</style> 
 <template>
 	<ul class="user-info">
 		<li>
 			<span class="user-info-key">头像</span>
 			<span class="user-info-value">
 				<div class="upload-avatar-box">
-					<img class="upload-avatar-img" :src="user.avatar">
+					<img class="upload-avatar-img" :src="profile.avatar">
 					<div class="upload-avatar-cover">
 						<label class="user-upload-label" for="user-upload"></label>
-						<input style="display:none" type="file" accept="image/jpeg,image/jpg,image/png,image/gif" ref="pick" @change="handleUploadAvatar" id="user-upload">
+						<input style="display:none" type="file" :accept="accepts" ref="pick" @change="handleUploadAvatar" id="user-upload">
 						<Icon type="camera" size="20" color="#fff"></Icon>
 					</div>
 				</div>
@@ -31,64 +31,66 @@
 		</li>
 		<li>
 			<span class="user-info-key">ID</span>
-			<span class="user-info-value">{{user.id}}</span> 
+			<span class="user-info-value">{{profile.id}}</span> 
 		</li>
 		<li>
 			<span class="user-info-key">登入邮箱</span>
-			<span class="user-info-value">{{user.email}}</span> 
+			<span class="user-info-value">{{profile.email}}</span> 
 		</li>
 		<li>
-			<span class="user-info-key">昵称</span>
-			<span class="user-info-value">{{user.nickname}}</span>
+			<span class="user-info-key">用户名称</span>
+			<span class="user-info-value">{{profile.nickname}}</span>
 			<a href="javascript:;" class="user-info-edit" @click="handleNickname">
 				<Icon type="edit" class="user-edit"></Icon> <span> 修改</span>
 			</a>
 		</li>
 		<li>
 			<span class="user-info-key">注册时间</span>
-			<span class="user-info-value">{{user.created_at | formatDate}}</span>
+			<span class="user-info-value">{{profile.created_at | formatDate}}</span>
 		</li>
 		<li>
 			<span class="user-info-key">登入时间</span>
-			<span class="user-info-value">{{user.login_time | formatDate}}</span>
+			<span class="user-info-value">{{profile.login_time | formatDate}}</span>
 		</li>
 		<li>
 			<span class="user-info-key">登入IP地址</span>
-			<span class="user-info-value">{{user.login_ip}}</span>
+			<span class="user-info-value">{{profile.login_ip}}</span>
 		</li>
 	</ul>
 </template>
 <script>
 	import util from './../../libs/util';
+	import admin from './../../api/admin';
     export default {
         computed:{
-        	user(){
-        		return this.$store.state.profile;
+        	profile(){
+        		return this.$store.state.auth.identity;
         	},
+        	accepts(){
+        		return this.$store.state.upload.uploadConfig.accepts;
+        	}
         },
 		methods:{
 			handleUploadAvatar(event)
 			{
 				let file = event.target.files[0];
 				if (file) {
-                    this.$upload(file,{maxSize:this.maxSize,accepts:this.accepts}).then( res => {
+                    this.$store.dispatch('upload',file).then( res => {
                     	res += '?imageView2/1/w/100/h/100/'
-                    	this.$http.put('user/' + this.user.id,{
-                    		avatar:res
-                    	}).then(() =>{
-                    		this.user.avatar = res;
+                    	admin.update(this.profile.id,{avatar:res}).then(() =>{
+                    		this.profile.avatar = res;
                     		this.$Message.success('上传成功');
-                    	}).catch(e=>{
+                    	}).catch(()=>{
                     		this.$Message.error('保存失败');
                     	})	
-                    }).catch(msg=>{
-                    	this.$Message.error(msg);
+                    }).catch(error=>{
+                    	this.$Message.error(error);
                     })
                 }
 			},
 			handleNickname()
 			{
-				let _val = this.user.nickname;
+				let _val = this.profile.nickname;
 				this.$Modal.confirm({
                     render: (h) => {
                         return h('Input', {
@@ -110,14 +112,14 @@
                     title: '修改昵称', 
                     loading : true,
                     onOk: () => {
-                    	if (_val == this.user.nickname) {
+                    	if (_val == this.profile.nickname) {
                     		this.$Modal.remove();
                     		return;
                     	}
-                        this.$http.put('user/' + this.user.id,{
+                        admin.update(this.profile.id,{
 							nickname : _val
 						}).then((res)=>{
-							this.user.nickname = _val;
+							this.profile.nickname = _val;
 						    this.$Modal.remove();
 						    this.$Message.success('修改成功！');
 						}).catch((err)=>{

@@ -55,15 +55,15 @@ export const userRouter = {
     component: Main,
     redirect: '/home',
     children: [{
-        path: '/user',
-        name: 'user',
+        path: '/profile',
+        name: 'profile',
         meta: {title: '个人中心',icon: 'person'},
-        component: resolve => {require(['../views/pages/user.vue'], resolve)}
+        component: resolve => {require(['../views/pages/profile.vue'], resolve)}
     }, {
-        path: '/user/password',
+        path: '/profile/password',
         name: 'password',
         meta: {title: '修改密码',icon: 'gear-a'},
-        component: resolve => {require(['../views/pages/password.vue'], resolve)}
+        component: resolve => {require(['../views/pages/profile-password.vue'], resolve)}
     }]
 };
 export const commonRouter = [
@@ -75,7 +75,7 @@ export const commonRouter = [
         name: 'login',
         meta: {title: '登入',auth: false},
         beforeEnter: (to, from, next) => {
-            if (store.state.token) {
+            if (store.state.auth.token) {
                 next({name:'home'});
             }else{
                 next()
@@ -104,18 +104,18 @@ const RouterConfig = {
 };
 const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
-    iView.LoadingBar.start();
-    util.title(to.meta.title);
+    iView.LoadingBar.start()
+    util.title(to.meta.title)
 
-    let isLogin = Boolean(store.state.token); //true用户已登录， false用户未登录
+    let isLogin = Boolean(store.state.auth.token) //true用户已登录， false用户未登录
     if (!isLogin && to.meta.auth !== false) {
-        next({name: 'login', query: {redirect: to.fullPath}});
+        next({name: 'login', query: {redirect: to.fullPath}})
     } else {
-        next();
+        next()
     }
 });
 router.afterEach(() => {
-    iView.LoadingBar.finish();
-    window.scrollTo(0, 0);
+    iView.LoadingBar.finish()
+    window.scrollTo(0, 0)
 });
 export default router;

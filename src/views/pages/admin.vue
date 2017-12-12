@@ -5,7 +5,7 @@
 <template>
     <div>
         <Button type="primary" style="margin-bottom: 20px" @click="create">+ 添加管理员</Button>
-        <Table :loading="loading":columns="columns" :data="data" style="border: 0"></Table>
+        <Table :loading="loading":columns="columns" :data="items" style="border: 0"></Table>
         <div class="tabel-footer">
             <Page 
                 :total="meta.totalCount" 
@@ -34,10 +34,11 @@
     </div>
 </template>
 <script>
+    import {mapState,mapActions} from 'vuex'
+
     export default {
         data() {
             return {
-                loading: true,
                 modal: {
                     show: false,
                     title: '',
@@ -135,35 +136,24 @@
                         }
                     }
                 ],
-                data: [ ],
-                meta: {
-                    currentPage: 1,
-                    pageCount:0,
-                    perPage: 20,
-                    totalCount:0,
-                }
             };
         },
-        mounted() {
-            this.dataInit();
+        computed:{
+            ...mapState({
+                loading:state=>state.admin.loading,
+                items:state=>state.admin.items,
+                meta:state=>state.admin.meta,
+            })
         },
         methods: {
-            dataInit(page,size){
-                this.loading = true;
-                page = page ? page : this.meta.currentPage ;
-                size = size ? size : this.meta.perPage;
-                let _url =  'user?page=' + page + '&per-page= ' + size;
-                this.$http.get(_url).then(res => {
-                    this.data = res.data.items; //更新数据
-                    this.meta = res.data._meta; //更新分页数据
-                    this.loading = false
-                })
-            },
+            ...mapActions([
+                'getAdminItems'
+            ]),
             changePage(index){
-                this.dataInit(index, this.meta.perPage);
+                this.getAdminItems(index, this.meta.perPage)
             },
             changeSize(size){
-                this.dataInit(this.meta.currentPage, size);
+                this.getAdminItems(this.meta.currentPage, size)
             },
             create(){
                 this.$refs.adminForm.resetFields();
@@ -213,6 +203,9 @@
                     }
                 })
             }
-        }
+        },
+        created() {
+            this.getAdminItems(null,null)
+        },
     };
 </script>

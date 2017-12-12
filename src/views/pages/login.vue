@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex';
 export default {
     data () {
         return {
@@ -50,22 +51,21 @@ export default {
         };
     },
     methods: {
+        ...mapActions([
+            'login'
+        ]),
         handleSubmit () {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    this.$store.dispatch('loginByEamil',{data:this.form,cb:res => {
+                    this.login(this.form).then(()=>{
                         let _path = this.$route.query.redirect || '/home'
                         this.$router.replace({ path: _path })
-                        this.$Message.success('登入成功')
-                    },errorCb:error=>{
-
-                    }})
+                    }).catch(error=>{
+                        this.$Message.error(error.message)
+                    })
                 }
             });
         }
-    },
-    mounted() {
-        
     }
 };
 </script>
