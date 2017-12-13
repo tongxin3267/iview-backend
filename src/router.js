@@ -2,9 +2,9 @@ import Vue from 'vue';
 import iView from 'iview';
 import VueRouter from 'vue-router';
 
-import Main from '../views/main.vue';
-import store from '../store/index';
-import util from '../libs/util';
+import Main from './views/main.vue';
+import store from './store/index';
+import util from './libs/util';
 // siderMenu 路由
 export const appRouter = [{
     path: '/panel',
@@ -16,7 +16,7 @@ export const appRouter = [{
             path: '/home',
             name: 'home',
             meta: {title: '管理首页',icon: 'ios-navigate'},
-            component: resolve => {require(['../views/pages/home.vue'], resolve)}
+            component: resolve => {require(['./views/pages/home.vue'], resolve)}
         }
     ]
 }, 
@@ -29,12 +29,12 @@ export const appRouter = [{
         path: '/page',
         name: 'page',
         meta: {title: '单页管理',},
-        component: resolve => {require(['../views/pages/page-index.vue'], resolve)},
+        component: resolve => {require(['./views/pages/page-index.vue'], resolve)},
         children:[{
             path: 'create',
             name: 'page-create',
             meta: {title: '添加页面',},
-            component: resolve => {require(['../views/pages/page-create.vue'], resolve)}
+            component: resolve => {require(['./views/pages/page-create.vue'], resolve)}
         }]
     }]
 },{
@@ -46,7 +46,7 @@ export const appRouter = [{
         path: '/admin',
         name: 'admin',
         meta: {title: '管理员设置',},
-        component: resolve => {require(['../views/pages/admin.vue'], resolve)},
+        component: resolve => {require(['./views/admin/index.vue'], resolve)},
     }]
 }];
 // 用户路由
@@ -58,12 +58,12 @@ export const userRouter = {
         path: '/profile',
         name: 'profile',
         meta: {title: '个人中心',icon: 'person'},
-        component: resolve => {require(['../views/pages/profile.vue'], resolve)}
+        component: resolve => {require(['./views/pages/profile.vue'], resolve)}
     }, {
-        path: '/profile/password',
+        path: '/password',
         name: 'password',
         meta: {title: '修改密码',icon: 'gear-a'},
-        component: resolve => {require(['../views/pages/profile-password.vue'], resolve)}
+        component: resolve => {require(['./views/pages/password.vue'], resolve)}
     }]
 };
 export const commonRouter = [
@@ -81,12 +81,12 @@ export const commonRouter = [
                 next()
             }
         },
-        component: resolve => {require(['../views/pages/login.vue'], resolve)}
+        component: resolve => {require(['./views/pages/login.vue'], resolve)}
     }, {
         path: '*',
         name: '404',
         meta: {title: '404-页面未找到！',auth: false},
-        component: resolve => {require(['../views/pages/404.vue'], resolve)}
+        component: resolve => {require(['./views/pages/404.vue'], resolve)}
     }
 ];
     

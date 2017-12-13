@@ -2,15 +2,7 @@ import util from '../libs/util';
 
 const _url = 'admin';
 export default {
-	getItems(page,prePage){
-		console.log(prePage)
-		let params = {};
-		if(page){
-			params['page'] = page;
-		}
-		if (prePage) {
-			params['pre-page'] = prePage;
-		}
+	getItems(params){
 		console.log(params)
 		return util.axios.get(_url,{params:params});
 	},

@@ -23,7 +23,7 @@
 					<img class="upload-avatar-img" :src="profile.avatar">
 					<div class="upload-avatar-cover">
 						<label class="user-upload-label" for="user-upload"></label>
-						<input style="display:none" type="file" :accept="accepts" ref="pick" @change="handleUploadAvatar" id="user-upload">
+						<input style="display:none" type="file" :accept="accepts" ref="pick" @change="uploadAvatar" id="user-upload">
 						<Icon type="camera" size="20" color="#fff"></Icon>
 					</div>
 				</div>
@@ -40,7 +40,7 @@
 		<li>
 			<span class="user-info-key">用户名称</span>
 			<span class="user-info-value">{{profile.nickname}}</span>
-			<a href="javascript:;" class="user-info-edit" @click="handleNickname">
+			<a href="javascript:;" class="user-info-edit" @click="updateNickname">
 				<Icon type="edit" class="user-edit"></Icon> <span> 修改</span>
 			</a>
 		</li>
@@ -59,8 +59,8 @@
 	</ul>
 </template>
 <script>
-	import util from './../../libs/util';
-	import admin from './../../api/admin';
+	import util from '../../libs/util';
+	import admin from '../../api/admin';
     export default {
         computed:{
         	profile(){
@@ -71,7 +71,7 @@
         	}
         },
 		methods:{
-			handleUploadAvatar(event)
+			uploadAvatar(event)
 			{
 				let file = event.target.files[0];
 				if (file) {
@@ -88,7 +88,7 @@
                     })
                 }
 			},
-			handleNickname()
+			updateNickname()
 			{
 				let _val = this.profile.nickname;
 				this.$Modal.confirm({

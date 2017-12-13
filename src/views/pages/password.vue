@@ -16,7 +16,7 @@
     </Form>
 </template>
 <script>
-    import admin from './../../api/admin';
+    import admin from '../../api/admin';
     export default {
         data() {
             const validatePassword = (rule, value, callback) => {
