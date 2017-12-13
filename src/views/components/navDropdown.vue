@@ -18,16 +18,15 @@
     	<Dropdown placement="bottom-end" @on-click="toRouter">
             <a href="javascript:;">
                 <Avatar 
-                    :src="user.avatar ? user.avatar : ''" 
-                    :icon="user.avatar ? '' : 'person'" 
+                    :src="avatar ? avatar : ''" 
+                    :icon="avatar ? '' : 'person'" 
                     style="vertical-align: middle;" 
                 />
-                <span class="user-avatar-name">{{user.nickname ? user.nickname : 'loading...'}}</span>
+                <span class="user-avatar-name">{{name ? name : 'loading...'}}</span>
             </a>
             <DropdownMenu slot="list" style="text-align:center">
-                <template v-for="item in dropdownItem"> 
-                    <DropdownItem :name="item.name"><Icon :type="item.meta.icon" style="padding-right: 4px;"></Icon>{{item.meta.title}}</DropdownItem>
-                </template>
+                <DropdownItem name="user"><Icon type="person" style="padding-right: 4px;"></Icon>个人中心</DropdownItem>
+                <DropdownItem name="password"><Icon type="gear-a" style="padding-right: 4px;"></Icon>修改密码</DropdownItem>
                 <DropdownItem divided name="logout"><Icon type="log-out" style="padding-right: 4px;"></Icon>退出登入</DropdownItem>
             </DropdownMenu>
         </Dropdown>
@@ -41,8 +40,14 @@
             };
         },
         props: {
-            user:Object,
-            dropdownItem: Array
+            name:{
+                type:String,
+                default:'loading...'
+            },
+            avatar:{
+                type:String,
+                default:''
+            }
         },
 		methods:{
             toRouter(name){

@@ -1,21 +1,13 @@
 <template>
-    <h3>home，hello!</h3>
+    <h2>首页</h2>
 </template>
 <script>
-    export default {
-        data() {
-            return {
-
-            };
-        },
-        mounted() {
-
-        },
-        beforeDestroy() {
-
-        },
-        methods: {
-
-        }
-    };
+export default {
+    computed:{
+      
+    },
+    methods:{
+       
+    },   
+}
 </script>

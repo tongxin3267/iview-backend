@@ -16,7 +16,7 @@
     </Form>
 </template>
 <script>
-    import admin from '../../api/admin';
+    import user from '../../api/user';
     export default {
         data() {
             const validatePassword = (rule, value, callback) => {
@@ -58,7 +58,7 @@
                 this.$refs.passwordForm.validate((valid) => {
                     if (valid) {
                         this.loading = true;
-                        admin.updatePassword(this.form).then((res)=>{
+                        user.updatePassword(this.form).then((res)=>{
                             this.loading = false;
                             this.$Message.success('修改成功！');
                             this.$store.dispatch('logout')

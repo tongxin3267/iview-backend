@@ -5,6 +5,52 @@ import VueRouter from 'vue-router';
 import Main from './views/main.vue';
 import store from './store/index';
 import util from './libs/util';
+
+// 登入
+export const login = {
+    path: '/login',
+    name: 'login',
+    meta: {title: '登入',auth: false},
+    beforeEnter: (to, from, next) => {
+        if (store.state.auth.token) {
+            next({name:'home'});
+        }else{
+            next()
+        }
+    },
+    component: resolve => {require(['./views/pages/login.vue'], resolve)}
+}
+// 404
+export const error404 = {
+    path: '*',
+    name: '404',
+    meta: {title: '404-页面未找到！',auth: false},
+    component: resolve => {require(['./views/pages/404.vue'], resolve)}
+}
+
+// 公共路由
+export const commonRouter = {
+    path: '/',
+    component: Main,
+    redirect: '/home',
+    children: [{
+        path: '/home',
+        name: 'home',
+        meta: {title: '首页'},
+        component: resolve => {require(['./views/pages/home.vue'], resolve)}
+    },{
+        path: 'user',
+        name: 'user',
+        meta: {title: '个人中心',icon: 'person'},
+        component: resolve => {require(['./views/pages/user.vue'], resolve)}
+    },{
+        path: 'password',
+        name: 'password',
+        meta: {title: '修改密码',icon: 'gear-a'},
+        component: resolve => {require(['./views/pages/password.vue'], resolve)}
+    },]
+}
+
 // siderMenu 路由
 export const appRouter = [{
     path: '/panel',
@@ -29,12 +75,12 @@ export const appRouter = [{
         path: '/page',
         name: 'page',
         meta: {title: '单页管理',},
-        component: resolve => {require(['./views/pages/page-index.vue'], resolve)},
+        component: resolve => {require(['./views/pages/home.vue'], resolve)},
         children:[{
             path: 'create',
             name: 'page-create',
             meta: {title: '添加页面',},
-            component: resolve => {require(['./views/pages/page-create.vue'], resolve)}
+            component: resolve => {require(['./views/pages/home.vue'], resolve)}
         }]
     }]
 },{
@@ -43,58 +89,19 @@ export const appRouter = [{
     meta: {title: '系统管理',icon: 'ios-navigate'},
     component: Main,
     children: [{
-        path: '/admin',
-        name: 'admin',
+        path: '/user/index',
+        name: 'user-index',
         meta: {title: '管理员设置',},
-        component: resolve => {require(['./views/admin/index.vue'], resolve)},
+        component: resolve => {require(['./views/user/index.vue'], resolve)},
     }]
 }];
-// 用户路由
-export const userRouter = {
-    path: '/',
-    component: Main,
-    redirect: '/home',
-    children: [{
-        path: '/profile',
-        name: 'profile',
-        meta: {title: '个人中心',icon: 'person'},
-        component: resolve => {require(['./views/pages/profile.vue'], resolve)}
-    }, {
-        path: '/password',
-        name: 'password',
-        meta: {title: '修改密码',icon: 'gear-a'},
-        component: resolve => {require(['./views/pages/password.vue'], resolve)}
-    }]
-};
-export const commonRouter = [
-    {
-        path: '/',
-        redirect: '/home',
-    }, {
-        path: '/login',
-        name: 'login',
-        meta: {title: '登入',auth: false},
-        beforeEnter: (to, from, next) => {
-            if (store.state.auth.token) {
-                next({name:'home'});
-            }else{
-                next()
-            }
-        },
-        component: resolve => {require(['./views/pages/login.vue'], resolve)}
-    }, {
-        path: '*',
-        name: '404',
-        meta: {title: '404-页面未找到！',auth: false},
-        component: resolve => {require(['./views/pages/404.vue'], resolve)}
-    }
-];
-    
+
 // 所有定义的路由
 export const routers = [
-    ...appRouter,
-    userRouter, 
-    ...commonRouter
+    login,
+    error404,
+    commonRouter,
+    ...appRouter
 ];
 Vue.use(VueRouter);
 // 路由配置

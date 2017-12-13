@@ -39,7 +39,7 @@
     </div>
 </template>
 <script>
-    import  admin from '../../api/admin'
+    import user from '../../api/user'
 
     export default {
         data() {
@@ -146,7 +146,7 @@
                     "page": page ? page : this.meta.currentPage,
                     "per-page": perPage ? perPage : this.meta.perPage,
                 }
-                admin.getItems(params).then(response=>{
+                user.getItems(params).then(response=>{
                     this.items = response.data.items
                     this.meta = response.data._meta
                     this.loading = false
@@ -169,7 +169,7 @@
                 this.modal.show = true;
             },
             remove(id) {
-                admin.remove(id).then(res => {
+                user.remove(id).then(res => {
                     this.$Message.success('删除成功')
                     this.getItems()
                 }).catch(error=>{
@@ -179,7 +179,7 @@
             handelSubmit(){
                 this.$refs.adminForm.validate((valid) => {
                     if (valid) {
-                        admin.update(this.modal.form.id,this.modal.form).then(response =>{
+                        user.update(this.modal.form.id,this.modal.form).then(response =>{
                             this.$Message.success('修改成功')
                             this.modal.show = false
                             this.getItems()
