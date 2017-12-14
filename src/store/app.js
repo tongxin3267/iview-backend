@@ -1,7 +1,8 @@
 export default {
 	state: {
 		sideMenu:[],
-		openSubmenu:[]
+		openSubmenu:[],
+		dropdownItem:[]
 	},
 	mutations: {
         sideMenu(state, data){
@@ -10,10 +11,14 @@ export default {
         openSubmenu(state, data){
             state.openSubmenu = data
         },
+        dropdownItem(state, data){
+        	state.dropdownItem = data
+        }
 	},
 	actions: {
-		menuInit({commit},{sideMenu,openSubmenu}){
+		menuInit({commit},{sideMenu,openSubmenu,dropdownItem}){
 			commit('sideMenu',sideMenu)
+			commit('dropdownItem',dropdownItem)
 			if (!openSubmenu) {
 				openSubmenu = [];
 				sideMenu.forEach((item, index) => {

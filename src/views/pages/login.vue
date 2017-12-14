@@ -61,7 +61,7 @@ export default {
                         let _path = this.$route.query.redirect || '/home'
                         this.$router.replace({ path: _path })
                     }).catch(error=>{
-                        this.$Message.error(error.message)
+                        this.$Message.error(error)
                     })
                 }
             });

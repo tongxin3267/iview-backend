@@ -33,10 +33,9 @@ util.axios.interceptors.response.use(data => {
 	return data;
 }, error => {
     if (!error.response) {
-        let error = { message:'Response error!' }
-        return Promise.reject(error);
+        return Promise.reject('#404 Not Found')
     }
-    return Promise.reject(error.response.data);
+    return Promise.reject(error.response.data.error)
 })
 util.upload = axios.create({
     timeout: 100000,
@@ -51,10 +50,10 @@ util.formatDate = function(time,fmt){
         fmt = fmt.replace(RegExp.$1, (date.getFullYear()+'').substr(4-RegExp.$1.length));
     }
     let o = {
-        'M+': date.getMonth()+1,
+        'm+': date.getMonth()+1,
         'd+': date.getDate(),
         'h+': date.getHours(),
-        'm+': date.getMinutes(),
+        'i+': date.getMinutes(),
         's+': date.getSeconds()
     }
     for(let k in o){    

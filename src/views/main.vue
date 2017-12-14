@@ -6,7 +6,7 @@
                     <img alt="logo" src="https://t.alipayobjects.com/images/rmsweb/T1B9hfXcdvXXXXXXXX.svg">
                     <span>iView-Backend</span>
                 </a>
-                <navDropdown :name="name" :avatar="avatar"></navDropdown>
+                <navDropdown :name="name" :avatar="avatar" :items="dropdownItem"></navDropdown>
             </div>
         </header>
         <div class="layout-wrap">
@@ -34,17 +34,18 @@
 <script>
     import sideMenu from './components/sideMenu.vue';
     import navDropdown from './components/navDropdown.vue';
-    import {appRouter} from '../router';
+    import {appRouter,commonRouter} from '../router';
     import {mapState,mapActions} from 'vuex';
     export default {
         components: {
             sideMenu,
-            navDropdown
+            navDropdown,
         }, 
         computed: {
             ...mapState({
                 sideMenu:state => state.app.sideMenu,
                 openSubmenu:state => state.app.openSubmenu,
+                dropdownItem:state => state.app.dropdownItem,
                 name:state => state.auth.identity.nickname,
                 avatar:state => state.auth.identity.avatar,
             }),
@@ -64,7 +65,7 @@
                 this.$store.dispatch('logout')
                 this.$router.replace({name:'login'})
             }) 
-            this.menuInit({sideMenu:appRouter,openSubmenu:null})
+            this.menuInit({sideMenu:appRouter,openSubmenu:null,dropdownItem:commonRouter.children})
             this.getUploadConfig()
         }
     };

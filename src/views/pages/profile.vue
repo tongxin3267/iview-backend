@@ -20,7 +20,7 @@
 			<span class="user-info-key">头像</span>
 			<span class="user-info-value">
 				<div class="upload-avatar-box">
-					<img class="upload-avatar-img" :src="user.avatar">
+					<img class="upload-avatar-img" :src="admin.avatar">
 					<div class="upload-avatar-cover">
 						<label class="user-upload-label" for="user-upload"></label>
 						<input style="display:none" type="file" :accept="accepts" ref="pick" @change="uploadAvatar" id="user-upload">
@@ -31,39 +31,39 @@
 		</li>
 		<li>
 			<span class="user-info-key">ID</span>
-			<span class="user-info-value">{{user.id}}</span> 
+			<span class="user-info-value">{{admin.id}}</span> 
 		</li>
 		<li>
 			<span class="user-info-key">登入邮箱</span>
-			<span class="user-info-value">{{user.email}}</span> 
+			<span class="user-info-value">{{admin.email}}</span> 
 		</li>
 		<li>
 			<span class="user-info-key">用户名称</span>
-			<span class="user-info-value">{{user.nickname}}</span>
+			<span class="user-info-value">{{admin.nickname}}</span>
 			<a href="javascript:;" class="user-info-edit" @click="updateNickname">
 				<Icon type="edit" class="user-edit"></Icon> <span> 修改</span>
 			</a>
 		</li>
 		<li>
 			<span class="user-info-key">注册时间</span>
-			<span class="user-info-value">{{user.created_at | formatDate}}</span>
+			<span class="user-info-value">{{admin.created_at | formatDate}}</span>
 		</li>
 		<li>
 			<span class="user-info-key">登入时间</span>
-			<span class="user-info-value">{{user.login_time | formatDate}}</span>
+			<span class="user-info-value">{{admin.login_time | formatDate}}</span>
 		</li>
 		<li>
 			<span class="user-info-key">登入IP地址</span>
-			<span class="user-info-value">{{user.login_ip}}</span>
+			<span class="user-info-value">{{admin.login_ip}}</span>
 		</li>
 	</ul>
 </template>
 <script>
 	import util from '../../libs/util';
-	import user from '../../api/user';
+	import admin from '../../api/admin';
     export default {
         computed:{
-        	user(){
+        	admin(){
         		return this.$store.state.auth.identity;
         	},
         	accepts(){
@@ -77,13 +77,13 @@
 				if (file) {
                     this.$store.dispatch('upload',file).then( res => {
                     	res += '?imageView2/1/w/100/h/100/'
-                    	user.update(this.user.id,{
+                    	admin.update(this.admin.id,{
                     		avatar:res
                     	}).then(() =>{
-                    		this.user.avatar = res;
+                    		this.admin.avatar = res;
                     		this.$Message.success('上传成功');
-                    	}).catch(()=>{
-                    		this.$Message.error('保存失败');
+                    	}).catch((error)=>{
+                    		this.$Message.error(error);
                     	})	
                     }).catch(error=>{
                     	this.$Message.error(error);
@@ -92,7 +92,7 @@
 			},
 			updateNickname()
 			{
-				let _val = this.user.nickname;
+				let _val = this.admin.nickname;
 				this.$Modal.confirm({
                     render: (h) => {
                         return h('Input', {
@@ -114,19 +114,19 @@
                     title: '修改昵称', 
                     loading : true,
                     onOk: () => {
-                    	if (_val == this.user.nickname) {
+                    	if (_val == this.admin.nickname) {
                     		this.$Modal.remove();
                     		return;
                     	}
-                        user.update(this.user.id,{
+                        admin.update(this.admin.id,{
 							nickname : _val
 						}).then((res)=>{
-							this.user.nickname = _val;
+							this.admin.nickname = _val;
 						    this.$Modal.remove();
 						    this.$Message.success('修改成功！');
-						}).catch((err)=>{
+						}).catch((error)=>{
 						    this.$Modal.remove();
-						    this.$Message.error('修改失败！');
+						    this.$Message.error(error);
 						});
                     },
                 })

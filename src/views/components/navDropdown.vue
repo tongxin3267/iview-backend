@@ -25,8 +25,11 @@
                 <span class="user-avatar-name">{{name ? name : 'loading...'}}</span>
             </a>
             <DropdownMenu slot="list" style="text-align:center">
-                <DropdownItem name="user"><Icon type="person" style="padding-right: 4px;"></Icon>个人中心</DropdownItem>
-                <DropdownItem name="password"><Icon type="gear-a" style="padding-right: 4px;"></Icon>修改密码</DropdownItem>
+                <template v-for="item in items">
+                    <DropdownItem :name="item.name">
+                        <Icon :type="item.meta.icon" style="padding-right: 4px;"></Icon>{{item.meta.title}}
+                    </DropdownItem>
+                </template>    
                 <DropdownItem divided name="logout"><Icon type="log-out" style="padding-right: 4px;"></Icon>退出登入</DropdownItem>
             </DropdownMenu>
         </Dropdown>
@@ -47,7 +50,8 @@
             avatar:{
                 type:String,
                 default:''
-            }
+            },
+            items:Array
         },
 		methods:{
             toRouter(name){

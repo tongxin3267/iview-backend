@@ -34,15 +34,10 @@ export const commonRouter = {
     component: Main,
     redirect: '/home',
     children: [{
-        path: '/home',
-        name: 'home',
-        meta: {title: '首页'},
-        component: resolve => {require(['./views/pages/home.vue'], resolve)}
-    },{
-        path: 'user',
-        name: 'user',
+        path: 'profile',
+        name: 'profile',
         meta: {title: '个人中心',icon: 'person'},
-        component: resolve => {require(['./views/pages/user.vue'], resolve)}
+        component: resolve => {require(['./views/pages/profile.vue'], resolve)}
     },{
         path: 'password',
         name: 'password',
@@ -89,10 +84,10 @@ export const appRouter = [{
     meta: {title: '系统管理',icon: 'ios-navigate'},
     component: Main,
     children: [{
-        path: '/user/index',
-        name: 'user-index',
+        path: '/admin',
+        name: 'admin',
         meta: {title: '管理员设置',},
-        component: resolve => {require(['./views/user/index.vue'], resolve)},
+        component: resolve => {require(['./views/admin/index.vue'], resolve)},
     }]
 }];
 
