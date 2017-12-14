@@ -86,8 +86,24 @@ export const appRouter = [{
     children: [{
         path: '/admin',
         name: 'admin',
-        meta: {title: '管理员设置',},
-        component: resolve => {require(['./views/admin/index.vue'], resolve)},
+        meta: {title: '管理员设置'},
+        redirect: '/admin/index',
+        children: [{
+            path: 'index',
+            name: 'admin-index',
+            meta: {title: '管理员列表',},
+            component: resolve => {require(['./views/admin/index.vue'], resolve)},
+        },{
+            path: 'create',
+            name: 'admin-create',
+            meta: {title: '添加管理员',},
+            component: resolve => {require(['./views/admin/create.vue'], resolve)}
+        },{
+            path: 'update/:id',
+            name: 'admin-update',
+            meta: {title: '编辑管理员',},
+            component: resolve => {require(['./views/admin/update.vue'], resolve)}
+        }]
     }]
 }];
 

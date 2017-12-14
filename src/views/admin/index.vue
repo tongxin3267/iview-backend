@@ -3,7 +3,7 @@
 </style>
 <template>
     <div>
-        <Button type="primary" style="margin-bottom: 20px">+ 添加管理员</Button>
+        <Button type="primary" style="margin-bottom: 20px" @click="goRouter('admin-create')">+ 添加管理员</Button>
         <Table 
             ref="adminItems"
             :loading="loading"
@@ -194,6 +194,9 @@
             };
         },
         methods: {
+            goRouter(name){
+                this.$router.push({name:name})
+            },
             getItems(page,perPage,sort){
                 this.loading = true;
                 let params = {

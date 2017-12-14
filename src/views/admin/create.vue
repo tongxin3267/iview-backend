@@ -1,13 +1,72 @@
- <Modal v-model="modal.show" :title="modal.title" ok-text="确定" cancel-text="取消" :loading="modal.loading" @on-ok="handleSubmit">
-    <Form ref="adminForm" :model="form.data" :rules="rules" :label-width="60">
-        <FormItem label="昵称：" prop="nickname">
-            <Input type="text" v-model="form.data.nickname"></Input>
+<template>
+    <Form ref="formItem" :model="formItem" :rules="rules" :label-width="180">
+        <FormItem label="用户名" prop="nickname">
+            <Input v-model="formItem.nickname"></Input>
         </FormItem>
-        <FormItem label="邮箱：" prop="email">
-            <Input type="text" v-model="form.data.email"></Input>
+        <FormItem label="登入邮箱" prop="email">
+            <Input v-model="formItem.email"></Input>
         </FormItem>
-        <FormItem label="密码：" prop="password">
-            <Input type="password" v-model="form.data.password"></Input>
+        <FormItem label="密码" prop="password">
+            <Input v-model="formItem.password"></Input>
+        </FormItem>
+        <FormItem label="状态">
+            <RadioGroup v-model.number="formItem.status">
+                <Radio label="10">正常</Radio>
+                <Radio label="0">禁用</Radio>
+            </RadioGroup>
+        </FormItem>
+        <FormItem>
+            <Button type="primary" @click="handleSubmit" :loading="loading">添加管理员</Button>
+            <Button type="ghost" style="margin-left: 8px">取消</Button>
         </FormItem>
     </Form>
-</Modal>
+</template>
+<script>
+    import admin from '../../api/admin'
+    export default {
+        data(){
+            return {
+                loading:false,
+                formItem:{
+                    nickname:'',
+                    email:'',
+                    password:'',
+                    status:10
+                },
+                rules:{
+                    nickname: [
+                        { required: true, message: '昵称不能为空', trigger: 'blur' },
+                        { type: 'string', min: 2, max:30, message: '昵称必须为2-30个字符', trigger: 'blur' }
+                    ],
+                    email: [
+                        { required: true, message: '邮箱不能为空', trigger: 'blur' },
+                        { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+                    ],
+                    password:[
+                        { required: true, message: '密码不能为空', trigger: 'blur' },
+                        { type: 'string', min: 2, max:30, message: '密码必须为2-30个字符', trigger: 'blur' }
+                    ],
+                },
+            }
+        },
+        methods:{
+            handleSubmit(){
+                this.$refs.formItem.validate((valid) => {
+                    if (valid) {
+                        admin.create(this.formItem).then(response =>{
+                            this.$Message.success('添加成功')
+                            this.$refs.formItem.resetFields()
+                            this.loading = false
+                        }).catch(error =>{
+                            this.$Message.error(error)
+                            this.loading = false
+                        })
+                    }else{
+                        this.loading = false
+                    }
+                })
+
+            }
+        }
+    }
+</script>
