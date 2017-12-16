@@ -1,9 +1,10 @@
 <template>
     <div class="content-wrap">
-        <Button type="primary" style="margin-bottom: 20px" @click="this.$router.push({name:'admin-create'})">
-            <Icon type="plus-round"></Icon> 添加管理员
+        <Button type="primary" style="margin-bottom: 20px" @click="create">
+            <Icon type="plus-round"></Icon> 添加权限
         </Button>
         <Table 
+            ref="adminItems"
             :loading="loading"
             :columns="columns" 
             :data="items" 
@@ -40,7 +41,7 @@
     </div>
 </template>
 <script>
-    import admin from '../../api/admin'
+    import permission from '../../api/permission'
     import util from '../../libs/util'
     export default {
         data() {
@@ -58,85 +59,26 @@
                         width: 60,
                     },
                     {
-                        title: 'ID',
-                        key: 'id',
-                        width: 80,
+                        title: '权限标识',
+                        key: 'name',
                         sortable:true,
                     },
                     {
-                        title: '管理员昵称',
-                        key: 'nickname',
+                        title: '权限描述',
+                        key: 'description',
                         sortable:true,
                     },
                     {
-                        title: '邮箱',
-                        key: 'email',
-                        sortable:true,
-                    },
-                    {
-                        title: '角色',
-                        key: 'roles',
-                        sortable:true,
-                        render: (h, {row}) => {
-                            let arr = []
-                            row.roles.forEach((item,index)=>{
-                                arr.push(h('Tag', {
-                                    props: {
-                                        color: 'blue'
-                                    },
-                                }, item.name))
-                            })
-                            if (arr.length) {
-                                return h('div', arr)
-                            }else{
-                                return h('Tag', {
-                                    props: {
-                                        color: 'blue'
-                                    },
-                                }, '未分配')
-                            }
-                        },
-                    },
-                    {
-                        title: '状态',
-                        key: 'status',
-                        width:100,
-                        render: (h, params) => {
-                            let row = params.row;
-                            let color = row.status === 10 ? 'green' : 'red';
-                            let text = row.status === 10 ? '正常' :  '禁用';
-                            return h('Tag', {
-                                props: {
-                                    color: color
-                                },
-                            }, text);
-                        },
-                        sortable:true,
-                        filters: [
-                            {
-                                label: '正常',
-                                value: '10'
-                            },
-                            {
-                                label: '禁用',
-                                value: '0'
-                            }
-                        ],
-                        filterMethod (value, row) {
-                            return row.status == value;
-                        },
-                    },
-                    {
-                        title: '最后登入时间',
-                        render: (h, {row}) => {
-                            return h('span',util.formatDate(row.login_time,'yyyy-mm-dd hh:ii'))
-                        },
-                        sortable:true,
-                    },
-                    {
-                        title: '注册时间',
+                        title: '创建时间',
                         render: (h, {row}) => {
                             return h('span',util.formatDate(row.created_at,'yyyy-mm-dd hh:ii'))
+                        },
+                        sortable:true,
+                    },
+                    {
+                        title: '更新时间',
+                        render: (h, {row}) => {
+                            return h('span',util.formatDate(row.updated_at,'yyyy-mm-dd hh:ii'))
                         },
                         sortable:true,
                     },
@@ -174,8 +116,7 @@
                         },
                     }
                 ],
-                selectionItems:[]
-            };
+            }
         },
         methods: {
             getItems(page,perPage,sort){
@@ -183,9 +124,9 @@
                 let params = {
                     "page": page ? page : this.meta.currentPage,
                     "per-page": perPage ? perPage : this.meta.perPage,
-                    "sort": sort ? sort : '-id',
+                    "sort": sort ? sort : 'name',
                 }
-                admin.getItems(params).then(response=>{
+                permission.getItems(params).then(response=>{
                     this.items = response.data.items
                     this.meta = response.data._meta
                     this.loading = false
@@ -217,33 +158,36 @@
                         title: '确认删除',
                         content: `您确定要批量删除${this.selectionItems.length}条数据吗?`,
                         onOk: () => {
-                            admin.deleteAll({id:data.substr(0,data.length-1)}).then(response=>{
+                            permission.deleteAll({id:data.substr(0,data.length-1)}).then(response=>{
                                 this.$Message.success(response.data + '条数据删除成功！')
                                 this.getItems()
                             }).catch(error=>{
-                                this.$Message.success(error)
+                                this.$Message.error(error)
                             })
                         },
                     })
                 }
             },
+            create(){
+                this.$router.push({name:'permission-create'})
+            },
             update(row){
-                this.$router.push({name:'admin-update',params:{id:row.id}})
+                this.$router.push({name:'permission-update',params:{id:row.id}})
             },
             delete(row) {
                 this.$Modal.confirm({
                     title: '确认删除',
-                    content: `您确定要删除管理员:${row.nickname} ?`,
+                    content: `您确定要删除:${row.name} ?`,
                     onOk: () => {
-                        admin.delete(row.id).then(res => {
+                        permission.delete(row.id).then(res => {
                             this.$Message.success('删除成功')
                             this.getItems()
                         }).catch(error=>{
-                            this.$Message.success(error)
+                            this.$Message.error(error)
                         })
                     },
                 })
-            }
+            },
         },
         created() {
             this.getItems()

@@ -1,5 +1,5 @@
 <template>
-    <Form ref="formItem" :model="formItem" :rules="rules" :label-width="180">
+    <Form ref="formItem" :model="formItem" :rules="rules" :label-width="100" class="auto-form-wrap">
         <FormItem label="用户名" prop="nickname">
             <Input v-model="formItem.nickname"></Input>
         </FormItem>
@@ -17,7 +17,6 @@
         </FormItem>
         <FormItem>
             <Button type="primary" @click="handleSubmit" :loading="loading">添加管理员</Button>
-            <Button type="ghost" style="margin-left: 8px">取消</Button>
         </FormItem>
     </Form>
 </template>
@@ -56,7 +55,7 @@
                         admin.create(this.formItem).then(response =>{
                             this.$Message.success('添加成功')
                             this.$refs.formItem.resetFields()
-                            this.loading = false
+                            this.$router.push({name:'admin-index'})                      
                         }).catch(error =>{
                             this.$Message.error(error)
                             this.loading = false

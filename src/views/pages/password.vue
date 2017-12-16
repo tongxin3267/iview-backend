@@ -1,13 +1,13 @@
 <template>
-    <Form ref="passwordForm" :model="form" :rules="rules" :label-width="100" style="padding-top: 20px" >
+    <Form ref="passwordForm" :model="form" :rules="rules" :label-width="100" class="auto-form-wrap">
         <FormItem label="旧密码" prop="password">
-            <Input type="password" v-model="form.password" style="width:300px"></Input>
+            <Input type="password" v-model="form.password"></Input>
         </FormItem>
         <FormItem label="新密码" prop="newPassword">
-            <Input type="password" v-model="form.newPassword" style="width:300px"></Input>
+            <Input type="password" v-model="form.newPassword"></Input>
         </FormItem>
         <FormItem label="确认输入" prop="repeatPassword">
-            <Input type="password" v-model="form.repeatPassword" style="width:300px"></Input>
+            <Input type="password" v-model="form.repeatPassword"></Input>
         </FormItem>
         <FormItem label="">
             <Button type="primary" :loading="loading" @click="handleOk" style="margin-right:6px">提交</Button>

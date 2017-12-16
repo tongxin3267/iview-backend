@@ -1,6 +1,6 @@
 <template>
 	<div class="layout-navigate"> 
-        <Menu ref="sideMenu" :active-name="$route.name"  :open-names="openSubmenu" width="auto" @on-select="toRouter">
+        <Menu ref="sideMenu" :active-name="active"  :open-names="openSubmenu" width="auto" @on-select="toRouter">
             <template v-for="item in sideMenu">
                 <Submenu :name="item.name" :key="item.path">
                     <template slot="title">
@@ -19,8 +19,12 @@
 	export default {
         data () {
             return {
-
             };
+        },
+        computed:{
+            active(){
+                return this.$route.name.replace(/-[a-z]+/g,'')
+            }
         },
         props: {
             openSubmenu: Array,

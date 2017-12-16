@@ -1,6 +1,6 @@
 import util from '../libs/util';
 
-const _url = 'admin';
+const _url = 'permission';
 export default {
 	getItems(params){
 		return util.axios.get(_url,{params:params});
@@ -20,10 +20,4 @@ export default {
 	deleteAll(data){
 		return util.axios.post(_url + '/delete-all',data);
 	},
-	password(data){
-		return util.axios.put(_url + '/password', data);
-	},
-	assignRole(id,data){
-		return util.axios.post(_url + '/assign-role?id='+ id, {roles:data});
-	}	
 }

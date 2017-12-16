@@ -2,7 +2,8 @@ import Vue from 'vue';
 import iView from 'iview';
 import VueRouter from 'vue-router';
 
-import Main from './views/main.vue';
+import layout from './views/layout.vue';
+import slayout from './views/slayout.vue';
 import store from './store/index';
 import util from './libs/util';
 
@@ -31,7 +32,7 @@ export const error404 = {
 // 公共路由
 export const commonRouter = {
     path: '/',
-    component: Main,
+    component: layout,
     redirect: '/home',
     children: [{
         path: 'profile',
@@ -51,7 +52,7 @@ export const appRouter = [{
     path: '/panel',
     name: 'panel',
     meta: {title: '我的面板',icon: 'ios-navigate'},
-    component: Main,
+    component: layout,
     children: [
         {
             path: '/home',
@@ -62,37 +63,21 @@ export const appRouter = [{
     ]
 }, 
 {
-    path: '/content',
-    name: 'content',
-    meta: {title: '内容管理',icon: 'ios-navigate'},
-    component: Main,
-    children: [{
-        path: '/page',
-        name: 'page',
-        meta: {title: '单页管理',},
-        component: resolve => {require(['./views/pages/home.vue'], resolve)},
-        children:[{
-            path: 'create',
-            name: 'page-create',
-            meta: {title: '添加页面',},
-            component: resolve => {require(['./views/pages/home.vue'], resolve)}
-        }]
-    }]
-},{
     path: '/config',
     name: 'config',
     meta: {title: '系统管理',icon: 'ios-navigate'},
-    component: Main,
+    component: layout,
     children: [{
         path: '/admin',
         name: 'admin',
         meta: {title: '管理员设置'},
-        redirect: '/admin/index',
+        component: slayout,
+        redirect: {name:'admin-index'},
         children: [{
             path: 'index',
             name: 'admin-index',
             meta: {title: '管理员列表',},
-            component: resolve => {require(['./views/admin/index.vue'], resolve)},
+            component: resolve => {require(['./views/admin/index.vue'], resolve)}
         },{
             path: 'create',
             name: 'admin-create',
@@ -103,6 +88,52 @@ export const appRouter = [{
             name: 'admin-update',
             meta: {title: '编辑管理员',},
             component: resolve => {require(['./views/admin/update.vue'], resolve)}
+        }]
+    },
+    {
+        path: '/role',
+        name: 'role',
+        meta: {title: '角色管理'},
+        component: slayout,
+        redirect: {name:'role-index'},
+        children: [{
+            path: 'index',
+            name: 'role-index',
+            meta: {title: '角色列表',},
+            component: resolve => {require(['./views/role/index.vue'], resolve)}
+        },{
+            path: 'create',
+            name: 'role-create',
+            meta: {title: '添加角色',},
+            component: resolve => {require(['./views/role/create.vue'], resolve)}
+        },{
+            path: 'update/:id',
+            name: 'role-update',
+            meta: {title: '编辑角色',},
+            component: resolve => {require(['./views/role/update.vue'], resolve)}
+        }]
+    },
+    {
+        path: '/permission',
+        name: 'permission',
+        meta: {title: '权限管理'},
+        component: slayout,
+        redirect: {name:'permission-index'},
+        children: [{
+            path: 'index',
+            name: 'permission-index',
+            meta: {title: '权限列表',},
+            component: resolve => {require(['./views/permission/index.vue'], resolve)}
+        },{
+            path: 'create',
+            name: 'permission-create',
+            meta: {title: '添加权限',},
+            component: resolve => {require(['./views/permission/create.vue'], resolve)}
+        },{
+            path: 'update/:id',
+            name: 'permission-update',
+            meta: {title: '编辑权限',},
+            component: resolve => {require(['./views/permission/update.vue'], resolve)}
         }]
     }]
 }];

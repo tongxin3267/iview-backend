@@ -38,7 +38,7 @@
 			<span class="user-info-value">{{admin.email}}</span> 
 		</li>
 		<li>
-			<span class="user-info-key">用户名称</span>
+			<span class="user-info-key">用户名</span>
 			<span class="user-info-value">{{admin.nickname}}</span>
 			<a href="javascript:;" class="user-info-edit" @click="updateNickname">
 				<Icon type="edit" class="user-edit"></Icon> <span> 修改</span>
@@ -134,7 +134,7 @@
 		},
 		filters:{
 	        formatDate(timestamp){
-	            return util.formatDate(timestamp,'yyyy-MM-dd h:m');
+	            return util.formatDate(timestamp,'yyyy-mm-dd hh:ii');
 	        }
 	    }
     };
