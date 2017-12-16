@@ -15,6 +15,13 @@
                 <Radio label="0">禁用</Radio>
             </RadioGroup>
         </FormItem>
+        <FormItem label="分配角色">
+            <CheckboxGroup v-model="formItem.roles">
+                <template v-for="role in roles">
+                    <Checkbox :label="role.id">{{role.name}}</Checkbox>
+                </template>
+            </CheckboxGroup>
+        </FormItem>
         <FormItem>
             <Button type="primary" @click="handleSubmit" :loading="loading">添加管理员</Button>
         </FormItem>
@@ -22,6 +29,8 @@
 </template>
 <script>
     import admin from '../../api/admin'
+    import role from '../../api/role'
+
     export default {
         data(){
             return {
@@ -30,8 +39,10 @@
                     nickname:'',
                     email:'',
                     password:'',
-                    status:10
+                    status:10,
+                    roles:[]
                 },
+                roles:[],
                 rules:{
                     nickname: [
                         { required: true, message: '昵称不能为空', trigger: 'blur' },
@@ -66,6 +77,13 @@
                 })
 
             }
+        },
+        created(){
+            role.getItems().then(response=>{
+                this.roles = response.data.items
+            }).catch(error=>{
+                this.$Message.error(error)
+            })
         }
     }
 </script>

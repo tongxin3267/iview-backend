@@ -16,7 +16,7 @@
             </RadioGroup>
         </FormItem>
         <FormItem label="分配角色">
-            <CheckboxGroup v-model="selectionRoles">
+            <CheckboxGroup v-model="formItem.roles">
                 <template v-for="role in roles">
                     <Checkbox :label="role.id">{{role.name}}</Checkbox>
                 </template>
@@ -30,7 +30,7 @@
 <script>
     import admin from '../../api/admin'
     import role from '../../api/role'
-    import assign from '../../api/assign'
+
     export default {
         data(){
             return {
@@ -59,13 +59,6 @@
             handleSubmit(){
                 this.$refs.formItem.validate((valid) => {
                     if (valid) {
-                        if (this.selectionRoles.length) {
-                            admin.assignRole(this.formItem.id,this.selectionRoles).then(response =>{
-                                this.$Message.success('分配成功')   
-                            }).catch(error =>{
-                                this.$Message.error(error)
-                            })
-                        }
                         admin.update(this.formItem.id,this.formItem).then(response =>{
                             this.$Message.success('修改成功')   
                             this.loading = false             
@@ -89,7 +82,7 @@
                     response.data.roles.forEach(items=>{
                         roles.push(items.id)
                     })
-                    this.selectionRoles = roles
+                    this.formItem.roles = roles
                 }).catch(error=>{
                     this.$Message.error(error)
                 })

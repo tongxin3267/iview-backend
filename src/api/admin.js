@@ -23,7 +23,4 @@ export default {
 	password(data){
 		return util.axios.put(_url + '/password', data);
 	},
-	assignRole(id,data){
-		return util.axios.post(_url + '/assign-role?id='+ id, {roles:data});
-	}	
 }

@@ -59,7 +59,13 @@
                         width: 60,
                     },
                     {
-                        title: '角色标识',
+                        title: 'ID',
+                        key: 'id',
+                        sortable:true,
+                        width: 100,
+                    },
+                    {
+                        title: '角色名称',
                         key: 'name',
                         sortable:true,
                     },

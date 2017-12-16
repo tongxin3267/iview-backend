@@ -1,6 +1,6 @@
 <template>
     <div class="content-wrap">
-        <Button type="primary" style="margin-bottom: 20px" @click="this.$router.push({name:'admin-create'})">
+        <Button type="primary" style="margin-bottom: 20px" @click="create">
             <Icon type="plus-round"></Icon> 添加管理员
         </Button>
         <Table 
@@ -226,6 +226,9 @@
                         },
                     })
                 }
+            },
+            create(){
+                this.$router.push({name:'admin-create'})
             },
             update(row){
                 this.$router.push({name:'admin-update',params:{id:row.id}})
