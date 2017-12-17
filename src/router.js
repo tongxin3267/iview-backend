@@ -102,15 +102,10 @@ export const appRouter = [{
             meta: {title: '角色列表',},
             component: resolve => {require(['./views/role/index.vue'], resolve)}
         },{
-            path: 'create',
-            name: 'role-create',
-            meta: {title: '添加角色',},
-            component: resolve => {require(['./views/role/create.vue'], resolve)}
-        },{
-            path: 'update/:id',
-            name: 'role-update',
-            meta: {title: '编辑角色',},
-            component: resolve => {require(['./views/role/update.vue'], resolve)}
+            path: 'assign/:id',
+            name: 'role-assign',
+            meta: {title: '设置权限',},
+            component: resolve => {require(['./views/role/assign.vue'], resolve)}
         }]
     },
     {
@@ -124,16 +119,6 @@ export const appRouter = [{
             name: 'permission-index',
             meta: {title: '权限列表',},
             component: resolve => {require(['./views/permission/index.vue'], resolve)}
-        },{
-            path: 'create',
-            name: 'permission-create',
-            meta: {title: '添加权限',},
-            component: resolve => {require(['./views/permission/create.vue'], resolve)}
-        },{
-            path: 'update/:id',
-            name: 'permission-update',
-            meta: {title: '编辑权限',},
-            component: resolve => {require(['./views/permission/update.vue'], resolve)}
         }]
     }]
 }];

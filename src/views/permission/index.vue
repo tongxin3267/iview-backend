@@ -15,7 +15,7 @@
         </Table>
         <Row class="content-page">
             <Col span="8">
-                <Dropdown @on-click="batchAction"  trigger="click" placement="bottom-start" style="margin-left: 20px">
+                <Dropdown @on-click="batchAction"  trigger="click" placement="bottom-start">
                     <Button type="primary">
                         批量操作
                         <Icon type="arrow-down-b"></Icon>
@@ -38,6 +38,24 @@
                 </Page>
             </Col>
         </Row>
+        <Modal
+            v-model="modal.show"
+            :title="modal.title"
+            :loading="modal.loading"
+            @on-ok="handleSubmit">
+            <Form ref="formItem" :model="modal.formItem" :rules="rules" :label-width="80">
+                <br/>
+                <FormItem label="权限标识" prop="name">
+                    <Input v-model="modal.formItem.name"></Input>
+                </FormItem>
+                <FormItem label="权限名称" prop="title">
+                    <Input v-model="modal.formItem.title"></Input>
+                </FormItem>
+                <FormItem label="权限描述" prop="description">
+                    <Input v-model="modal.formItem.description"></Input>
+                </FormItem>
+            </Form>
+        </Modal>
     </div>
 </template>
 <script>
@@ -62,11 +80,17 @@
                         title: '权限标识',
                         key: 'name',
                         sortable:true,
+                        width:160
+                    },
+                    {
+                        title: '权限名称',
+                        key: 'title',
+                        sortable:true,
                     },
                     {
                         title: '权限描述',
                         key: 'description',
-                        sortable:true,
+                        width:300
                     },
                     {
                         title: '创建时间',
@@ -89,7 +113,7 @@
                             return h('div', [
                                 h('Button', {
                                     props: {
-                                        type: 'ghost',
+                                        type: 'primary',
                                         size: 'small'
                                     },
                                     style:{
@@ -103,7 +127,7 @@
                                 },'编辑'),
                                 h('Button', {
                                     props: {
-                                        type: 'ghost',
+                                        type: 'error',
                                         size: 'small'
                                     },
                                     on: {
@@ -116,6 +140,25 @@
                         },
                     }
                 ],
+                modal:{
+                    id:null,
+                    show:false,
+                    loading:true,
+                    title:'',
+                    formItem:{
+                        name:'',
+                        title:'',
+                        description:''
+                    },
+                },
+                rules:{
+                    name:[
+                        { required: true, message: '权限标识不能为空', trigger: 'blur' },
+                    ],
+                    title:[
+                        { required: true, message: '权限名称不能为空', trigger: 'blur' },
+                    ],
+                },
             }
         },
         methods: {
@@ -124,7 +167,7 @@
                 let params = {
                     "page": page ? page : this.meta.currentPage,
                     "per-page": perPage ? perPage : this.meta.perPage,
-                    "sort": sort ? sort : 'name',
+                    "sort": sort ? sort : 'id',
                 }
                 permission.getItems(params).then(response=>{
                     this.items = response.data.items
@@ -169,10 +212,19 @@
                 }
             },
             create(){
-                this.$router.push({name:'permission-create'})
+                this.$refs.formItem.resetFields();
+                this.modal.id = null
+                this.modal.title='添加权限'
+                this.modal.show = true
             },
             update(row){
-                this.$router.push({name:'permission-update',params:{id:row.id}})
+                this.$refs.formItem.resetFields();
+                this.modal.id = row.id
+                this.modal.formItem.name = row.name
+                this.modal.formItem.title = row.title
+                this.modal.formItem.description = row.description
+                this.modal.title='修改权限'
+                this.modal.show = true
             },
             delete(row) {
                 this.$Modal.confirm({
@@ -188,6 +240,36 @@
                     },
                 })
             },
+            handleSubmit(){
+                this.$refs.formItem.validate((valid) => {
+                    if (valid) {
+                        if (this.modal.id) {
+                            permission.update(this.modal.id,this.modal.formItem).then(response=>{
+                                this.$Message.success('修改成功')
+                                this.modal.show = false
+                                this.getItems()
+                            }).catch(error=>{
+                                this.$Message.error(error)
+                                this.modal.loading = false
+                            })
+                        }else{
+                            permission.create(this.modal.formItem).then(response=>{
+                                this.$Message.success('添加成功')
+                                this.modal.show = false
+                                this.getItems()
+                            }).catch(error=>{
+                                this.$Message.error(error)
+                                this.modal.loading = false
+                            })
+                        }
+                    }else{
+                        this.modal.loading = false
+                    }
+                    this.$nextTick(()=> {
+                        this.modal.loading = true
+                    })
+                })
+            }
         },
         created() {
             this.getItems()

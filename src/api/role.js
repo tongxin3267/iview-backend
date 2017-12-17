@@ -20,4 +20,7 @@ export default {
 	deleteAll(data){
 		return util.axios.post(_url + '/delete-all',data);
 	},
+	assign(id,data){
+		return util.axios.post(_url + '/assign?id=' + id,data);
+	}
 }

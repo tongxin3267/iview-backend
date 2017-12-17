@@ -63,7 +63,6 @@
             }).catch(error=> {
                 this.$Message.error(error.message)
                 this.$store.dispatch('logout')
-                this.$router.replace({name:'login'})
             }) 
             this.menuInit({sideMenu:appRouter,openSubmenu:null,dropdownItem:commonRouter.children})
             this.getUploadConfig()

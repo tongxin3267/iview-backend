@@ -79,7 +79,7 @@
                         sortable:true,
                         render: (h, {row}) => {
                             let arr = []
-                            row.roles.forEach((item,index)=>{
+                            row.roles.forEach((item)=>{
                                 arr.push(h('Tag', {
                                     props: {
                                         color: 'blue'
@@ -147,7 +147,7 @@
                             return h('div', [
                                 h('Button', {
                                     props: {
-                                        type: 'ghost',
+                                        type: 'primary',
                                         size: 'small'
                                     },
                                     style:{
@@ -161,7 +161,7 @@
                                 },'编辑'),
                                 h('Button', {
                                     props: {
-                                        type: 'ghost',
+                                        type: 'error',
                                         size: 'small'
                                     },
                                     on: {

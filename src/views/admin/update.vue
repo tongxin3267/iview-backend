@@ -38,8 +38,6 @@
                 formItem:{
                 },
                 roles:[],
-                selectionRoles:[
-                ],
                 rules:{
                     nickname: [
                         { required: true, message: '昵称不能为空', trigger: 'blur' },
@@ -59,7 +57,8 @@
             handleSubmit(){
                 this.$refs.formItem.validate((valid) => {
                     if (valid) {
-                        admin.update(this.formItem.id,this.formItem).then(response =>{
+                        let id = this.$route.params.id
+                        admin.update(id,this.formItem).then(response =>{
                             this.$Message.success('修改成功')   
                             this.loading = false             
                         }).catch(error =>{
@@ -77,8 +76,8 @@
             let id = this.$route.params.id
             if (id) {
                 admin.view(id).then(response=>{
-                    let roles = []
                     this.formItem = response.data
+                    let roles = []
                     response.data.roles.forEach(items=>{
                         roles.push(items.id)
                     })

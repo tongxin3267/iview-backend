@@ -1,10 +1,12 @@
 import util from '../libs/util'
 import auth from '../api/auth'
+import router from '../router'
 
 export default {
 	state: {
 		token: util.cookies.get('token') || null, //token凭证
 		identity: {},  //身份信息
+		filterRouter: {}
 	},
 	mutations: {
 		token(state, data){
@@ -17,6 +19,9 @@ export default {
         },
         identity(state, data){
             state.identity = data
+        },
+        filterRouter(state, data){
+            state.filterRouter = data
         },
 
 	},
@@ -34,11 +39,13 @@ export default {
         logout({commit}){
             commit('identity',{})
             commit('token',null)
+            router.push({name:'login'})
         },
         getIdentity({commit}){
         	return new Promise((resolve, reject) => {
 	            auth.getIdentity().then(response=>{
-	                commit('identity',response.data)
+	                commit('identity',response.data.identity)
+	                commit('filterRouter',response.data.filterRouter)
 	                resolve(response)
 	            }).catch(error=>{
 	            	reject(error)
