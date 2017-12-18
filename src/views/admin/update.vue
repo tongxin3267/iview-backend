@@ -78,8 +78,8 @@
                 admin.view(id).then(response=>{
                     this.formItem = response.data
                     let roles = []
-                    response.data.roles.forEach(items=>{
-                        roles.push(items.id)
+                    response.data.roles.forEach(item=>{
+                        roles.push(item.id)
                     })
                     this.formItem.roles = roles
                 }).catch(error=>{

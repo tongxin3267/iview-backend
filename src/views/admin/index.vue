@@ -242,7 +242,7 @@
                             this.$Message.success('删除成功')
                             this.getItems()
                         }).catch(error=>{
-                            this.$Message.success(error)
+                            this.$Message.error(error)
                         })
                     },
                 })

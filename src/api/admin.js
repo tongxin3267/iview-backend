@@ -20,7 +20,4 @@ export default {
 	deleteAll(data){
 		return util.axios.post(_url + '/delete-all',data);
 	},
-	password(data){
-		return util.axios.put(_url + '/password', data);
-	},
 }
