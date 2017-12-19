@@ -52,20 +52,35 @@
         },
         methods: {
             ...mapActions([
-                'menuInit',
+                'sideMenuInit',
+                'openSubmenuInit',
+                'dropdownItemInit',
                 'getIdentity',
                 'getUploadConfig'
             ]),
+            filterRoutes(){
+                //权限过滤实现
+                return this.appRouter;
+            }
         },
         created () {
-            this.getIdentity().then(()=>{
+            this.getIdentity().then((response)=>{
                 //成功拉取身份信息
-            }).catch(error=> {
+                //动态添加路由
+                let routes = this.filterRoutes()
+                this.$router.addRoutes(routes)
+                this.sideMenuInit(routes)
+                let openSubmenu = []
+                routes.forEach((item)=>{
+                    openSubmenu.push(item.name)
+                })
+                this.openSubmenuInit(openSubmenu)
+                this.dropdownItemInit(commonRouter.children)
+                this.getUploadConfig()
+            }).catch(error=>{
                 this.$Message.error(error.message)
                 this.$store.dispatch('logout')
             }) 
-            this.menuInit({sideMenu:appRouter,openSubmenu:null,dropdownItem:commonRouter.children})
-            this.getUploadConfig()
         }
     };
 </script>

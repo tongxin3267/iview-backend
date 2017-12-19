@@ -6,7 +6,6 @@ export default {
 	state: {
 		token: util.cookies.get('token') || null, //token凭证
 		identity: {},  //身份信息
-		filterRouter: {}
 	},
 	mutations: {
 		token(state, data){
@@ -20,10 +19,6 @@ export default {
         identity(state, data){
             state.identity = data
         },
-        filterRouter(state, data){
-            state.filterRouter = data
-        },
-
 	},
 	actions: {
 		login({commit},data){ 
@@ -45,8 +40,7 @@ export default {
         	return new Promise((resolve, reject) => {
 	            auth.getIdentity().then(response=>{
 	                commit('identity',response.data.identity)
-	                commit('filterRouter',response.data.filterRouter)
-	                resolve(response)
+	                resolve(response.data)
 	            }).catch(error=>{
 	            	reject(error)
 	            })

@@ -11,7 +11,7 @@ import util from './libs/util';
 export const login = {
     path: '/login',
     name: 'login',
-    meta: {title: '登入',auth: false},
+    meta: {title: '登入', auth:false},
     beforeEnter: (to, from, next) => {
         if (store.state.auth.token) {
             next({name:'home'});
@@ -25,7 +25,7 @@ export const login = {
 export const error404 = {
     path: '*',
     name: '404',
-    meta: {title: '404-页面未找到！',auth: false},
+    meta: {title: '404-页面未找到！',auth:false},
     component: resolve => {require(['./views/pages/404.vue'], resolve)}
 }
 
@@ -57,7 +57,7 @@ export const appRouter = [{
         {
             path: '/home',
             name: 'home',
-            meta: {title: '管理首页',icon: 'ios-navigate'},
+            meta: {title: '管理首页',icon: 'ios-navigate',},
             component: resolve => {require(['./views/pages/home.vue'], resolve)}
         }
     ]
@@ -70,7 +70,7 @@ export const appRouter = [{
     children: [{
         path: '/admin',
         name: 'admin',
-        meta: {title: '管理员设置'},
+        meta: {title: '管理员设置',},
         component: slayout,
         redirect: {name:'admin-index'},
         children: [{
@@ -99,7 +99,7 @@ export const appRouter = [{
         children: [{
             path: 'index',
             name: 'role-index',
-            meta: {title: '角色列表',},
+            meta: {title: '角色列表'},
             component: resolve => {require(['./views/role/index.vue'], resolve)}
         },{
             path: 'assign/:id',
@@ -128,7 +128,6 @@ export const routers = [
     login,
     error404,
     commonRouter,
-    ...appRouter
 ];
 Vue.use(VueRouter);
 // 路由配置
@@ -152,4 +151,6 @@ router.afterEach(() => {
     iView.LoadingBar.finish()
     window.scrollTo(0, 0)
 });
+
+// router.addRoutes(routes)
 export default router;

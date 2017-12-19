@@ -16,16 +16,14 @@ export default {
         }
 	},
 	actions: {
-		menuInit({commit},{sideMenu,openSubmenu,dropdownItem}){
-			commit('sideMenu',sideMenu)
-			commit('dropdownItem',dropdownItem)
-			if (!openSubmenu) {
-				openSubmenu = [];
-				sideMenu.forEach((item, index) => {
-                    openSubmenu.push(item.name);
-                })
-			}
-			commit('openSubmenu',openSubmenu)
+		sideMenuInit({commit},data){
+			commit('sideMenu', data)
+		},
+		openSubmenuInit({commit},data){
+			commit('openSubmenu',data)
+		},
+		dropdownItemInit({commit},data){
+			commit('dropdownItem',data)
 		}
 	}
 }

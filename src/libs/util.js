@@ -40,6 +40,8 @@ util.axios.interceptors.response.use(data => {
 util.upload = axios.create({
     timeout: 100000,
 });
+
+
 //php时间戳格式化
 util.formatDate = function(time,fmt){
     let date = new Date(time*1000);
