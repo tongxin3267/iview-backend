@@ -19,14 +19,14 @@ export const login = {
             next()
         }
     },
-    component: resolve => {require(['./views/pages/login.vue'], resolve)}
+    component: resolve => {require(['./views/common/login.vue'], resolve)}
 }
 // 404
 export const error404 = {
     path: '*',
     name: '404',
     meta: {title: '404-页面未找到！',auth:false},
-    component: resolve => {require(['./views/pages/404.vue'], resolve)}
+    component: resolve => {require(['./views/common/404.vue'], resolve)}
 }
 
 // 公共路由
@@ -38,12 +38,12 @@ export const commonRouter = {
         path: 'profile',
         name: 'profile',
         meta: {title: '个人中心',icon: 'person'},
-        component: resolve => {require(['./views/pages/profile.vue'], resolve)}
+        component: resolve => {require(['./views/common/profile.vue'], resolve)}
     },{
         path: 'password',
         name: 'password',
         meta: {title: '修改密码',icon: 'gear-a'},
-        component: resolve => {require(['./views/pages/password.vue'], resolve)}
+        component: resolve => {require(['./views/common/password.vue'], resolve)}
     },]
 }
 
@@ -58,7 +58,38 @@ export const appRouter = [{
             path: '/home',
             name: 'home',
             meta: {title: '管理首页',icon: 'ios-navigate',},
-            component: resolve => {require(['./views/pages/home.vue'], resolve)}
+            component: resolve => {require(['./views/common/home.vue'], resolve)}
+        }
+    ]
+}, 
+{
+    path: '/content',
+    name: 'content',
+    meta: {title: '内容管理',icon: 'ios-navigate'},
+    component: layout,
+    children: [
+        {
+            path: '/page',
+            name: 'page',
+            meta: {title: '单页管理'},
+            component: slayout,
+            redirect: {name:'page-index'},
+            children: [{
+                path: 'index',
+                name: 'page-index',
+                meta: {title: '单页列表',},
+                component: resolve => {require(['./views/page/index.vue'], resolve)}
+            },{
+                path: 'create',
+                name: 'page-create',
+                meta: {title: '添加单页',},
+                component: resolve => {require(['./views/page/create.vue'], resolve)}
+            },{
+                path: 'update/:id',
+                name: 'page-update',
+                meta: {title: '更新单页',},
+                component: resolve => {require(['./views/page/update.vue'], resolve)}
+            }]
         }
     ]
 }, 
@@ -128,6 +159,7 @@ export const routers = [
     login,
     error404,
     commonRouter,
+    ...appRouter
 ];
 Vue.use(VueRouter);
 // 路由配置

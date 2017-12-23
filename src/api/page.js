@@ -1,8 +1,8 @@
 import util from '../libs/util';
 
-const _url = 'admin';
+const _url = 'page';
 export default {
-	getItems(params){
+	getItems(params){ 
 		return util.axios.get(_url,{params:params});
 	},
 	view(id){

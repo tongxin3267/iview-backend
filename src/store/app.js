@@ -1,8 +1,9 @@
 export default {
 	state: {
+		show:false,
 		sideMenu:[],
 		openSubmenu:[],
-		dropdownItem:[]
+		dropdownItem:[],
 	},
 	mutations: {
         sideMenu(state, data){
@@ -13,6 +14,18 @@ export default {
         },
         dropdownItem(state, data){
         	state.dropdownItem = data
+        },
+        show(state, data){
+        	state.show = data
+        },
+        filerMenu(state,data){
+        	state.sideMenu.forEach((menu)=>{
+        		menu.children.forEach((item,index)=>{
+        			if (item.meta.auth && (data.indexOf(item.meta.auth) === -1)) {
+        				menu.children.splice(index,1)
+        			}
+        		})
+        	})
         }
 	},
 	actions: {
@@ -24,6 +37,10 @@ export default {
 		},
 		dropdownItemInit({commit},data){
 			commit('dropdownItem',data)
+		},
+		filerMenu({commit},data){
+			commit('filerMenu',data)
+			commit('show',true)
 		}
 	}
 }

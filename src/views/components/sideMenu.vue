@@ -15,7 +15,6 @@
     </div>	
 </template>
 <script type="text/javascript">
-	import Vue from 'vue';
 	export default {
         data () {
             return {
@@ -38,7 +37,7 @@
                 });
 			}
 		},
-        mounted() {
+        created() { 
             this.$nextTick(() => {
                 this.$refs.sideMenu.updateOpened();
                 this.$refs.sideMenu.updateActiveName();

@@ -1,7 +1,7 @@
 <template>
     <div class="content-wrap">
         <Button type="primary" style="margin-bottom: 20px" @click="create">
-            <Icon type="plus-round"></Icon> 添加管理员
+            <Icon type="plus-round"></Icon> 添加页面
         </Button>
         <Table 
             :loading="loading"
@@ -40,7 +40,7 @@
     </div>
 </template>
 <script>
-    import admin from '../../api/admin'
+    import page from '../../api/page'
     import util from '../../libs/util'
     export default {
         data() {
@@ -64,38 +64,14 @@
                         sortable:true,
                     },
                     {
-                        title: '管理员昵称',
-                        key: 'nickname',
+                        title: '页面标识',
+                        key: 'catname',
                         sortable:true,
                     },
                     {
-                        title: '邮箱',
-                        key: 'email',
+                        title: '页面标题',
+                        key: 'title',
                         sortable:true,
-                    },
-                    {
-                        title: '角色',
-                        key: 'roles',
-                        sortable:true,
-                        render: (h, {row}) => {
-                            let arr = []
-                            row.roles.forEach((item)=>{
-                                arr.push(h('Tag', {
-                                    props: {
-                                        color: 'blue'
-                                    },
-                                }, item.name))
-                            })
-                            if (arr.length) {
-                                return h('div', arr)
-                            }else{
-                                return h('Tag', {
-                                    props: {
-                                        color: 'blue'
-                                    },
-                                }, '未分配')
-                            }
-                        },
                     },
                     {
                         title: '状态',
@@ -103,8 +79,8 @@
                         width:100,
                         render: (h, params) => {
                             let row = params.row;
-                            let color = row.status === 10 ? 'green' : 'red';
-                            let text = row.status === 10 ? '正常' :  '禁用';
+                            let color = row.status === 1 ? 'green' : 'red';
+                            let text = row.status === 1 ? '发布' :  '草稿';
                             return h('Tag', {
                                 props: {
                                     color: color
@@ -114,11 +90,11 @@
                         sortable:true,
                         filters: [
                             {
-                                label: '正常',
-                                value: '10'
+                                label: '发布',
+                                value: '1'
                             },
                             {
-                                label: '禁用',
+                                label: '草稿',
                                 value: '0'
                             }
                         ],
@@ -127,17 +103,13 @@
                         },
                     },
                     {
-                        title: '最后登入时间',
-                        render: (h, {row}) => {
-                            return h('span',util.formatDate(row.login_time,'yyyy-mm-dd hh:ii'))
-                        },
+                        title: '添加时间',
+                        key: 'created_time',
                         sortable:true,
                     },
                     {
-                        title: '注册时间',
-                        render: (h, {row}) => {
-                            return h('span',util.formatDate(row.created_at,'yyyy-mm-dd hh:ii'))
-                        },
+                        title: '更新时间',
+                        key: 'updated_time',
                         sortable:true,
                     },
                     {
@@ -178,14 +150,14 @@
             };
         },
         methods: {
-            getItems(page,perPage,sort){
+            getItems(currentPage,perPage,sort){
                 this.loading = true;
                 let params = {
-                    "page": page ? page : this.meta.currentPage,
+                    "page": currentPage ? currentPage : this.meta.currentPage,
                     "per-page": perPage ? perPage : this.meta.perPage,
                     "sort": sort ? sort : '-id',
                 }
-                admin.getItems(params).then(response=>{
+                page.getItems(params).then(response=>{
                     this.items = response.data.items
                     this.meta = response.data._meta
                     this.loading = false
@@ -217,7 +189,7 @@
                         title: '确认删除',
                         content: `您确定要批量删除${data.length}条数据吗?`,
                         onOk: () => {
-                            admin.batch({delete:data}).then(response=>{
+                            page.batch({delete:data}).then(response=>{
                                 this.$Message.success(response.data + '条数据删除成功！')
                                 this.getItems()
                             }).catch(error=>{
@@ -228,17 +200,17 @@
                 }
             },
             create(){
-                this.$router.push({name:'admin-create'})
+                this.$router.push({name:'page-create'})
             },
             update(row){
-                this.$router.push({name:'admin-update',params:{id:row.id}})
+                this.$router.push({name:'page-update',params:{id:row.id}})
             },
             delete(row) {
                 this.$Modal.confirm({
                     title: '确认删除',
-                    content: `您确定要删除管理员:${row.nickname} ?`,
+                    content: `您确定要删除:${row.catname} ?`,
                     onOk: () => {
-                        admin.delete(row.id).then(res => {
+                        page.delete(row.id).then(res => {
                             this.$Message.success('删除成功')
                             this.getItems()
                         }).catch(error=>{

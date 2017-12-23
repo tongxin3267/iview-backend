@@ -14,7 +14,7 @@
                 <Row>
                     <Col span="4">
                         <div class="layout-navigate">
-                            <sideMenu :sideMenu="sideMenu" :openSubmenu="openSubmenu" :iconSize="14"></sideMenu>
+                            <sideMenu v-if="show" :sideMenu="sideMenu" :openSubmenu="openSubmenu" :iconSize="14"></sideMenu>
                         </div>
                     </Col>
                     <Col span="20">
@@ -37,6 +37,11 @@
     import {appRouter,commonRouter} from '../router';
     import {mapState,mapActions} from 'vuex';
     export default {
+        data(){
+            return {
+                
+            }
+        },
         components: {
             sideMenu,
             navDropdown,
@@ -46,6 +51,7 @@
                 sideMenu:state => state.app.sideMenu,
                 openSubmenu:state => state.app.openSubmenu,
                 dropdownItem:state => state.app.dropdownItem,
+                show:state => state.app.show,
                 name:state => state.auth.identity.nickname,
                 avatar:state => state.auth.identity.avatar,
             }),
@@ -55,32 +61,29 @@
                 'sideMenuInit',
                 'openSubmenuInit',
                 'dropdownItemInit',
+                'filerMenu',
                 'getIdentity',
                 'getUploadConfig'
             ]),
-            filterRoutes(){
-                //权限过滤实现
-                return this.appRouter;
-            }
         },
         created () {
-            this.getIdentity().then((response)=>{
+            this.getIdentity().then(response=>{
                 //成功拉取身份信息
-                //动态添加路由
-                let routes = this.filterRoutes()
-                this.$router.addRoutes(routes)
-                this.sideMenuInit(routes)
-                let openSubmenu = []
-                routes.forEach((item)=>{
-                    openSubmenu.push(item.name)
-                })
-                this.openSubmenuInit(openSubmenu)
-                this.dropdownItemInit(commonRouter.children)
+                this.filerMenu(response.filterRouter)
                 this.getUploadConfig()
             }).catch(error=>{
                 this.$Message.error(error.message)
                 this.$store.dispatch('logout')
             }) 
+        },
+        mounted(){
+            this.sideMenuInit(appRouter)
+            let openSubmenu = []
+            appRouter.forEach((item)=>{
+                openSubmenu.push(item.name)
+            })
+            this.openSubmenuInit(openSubmenu)
+            this.dropdownItemInit(commonRouter.children)
         }
     };
 </script>
