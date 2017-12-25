@@ -22,7 +22,8 @@
         },
         computed:{
             active(){
-                return this.$route.name.replace(/-[a-z]+/g,'')
+                let len = this.$route.matched.length
+                return (this.$route.matched.length > 1) ? this.$route.matched[1].name : this.$route.name
             }
         },
         props: {

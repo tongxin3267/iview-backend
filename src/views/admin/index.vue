@@ -1,42 +1,44 @@
 <template>
     <div class="content-wrap">
-        <Button type="primary" style="margin-bottom: 20px" @click="create">
-            <Icon type="plus-round"></Icon> 添加管理员
-        </Button>
-        <Table 
-            :loading="loading"
-            :columns="columns" 
-            :data="items" 
-            @on-sort-change="sort"
-            @on-selection-change="selection"
-            class="content-table"
-            >
-        </Table>
-        <Row class="content-page">
-            <Col span="8">
-                <Dropdown @on-click="batchAction"  trigger="click" placement="bottom-start" style="margin-left: 20px">
-                    <Button type="primary">
-                        批量操作
-                        <Icon type="arrow-down-b"></Icon>
-                    </Button>
-                    <DropdownMenu slot="list">
-                        <DropdownItem name="deleteAll"><Icon type="trash-a"></Icon> 批量删除</DropdownItem>
-                    </DropdownMenu>
-                </Dropdown>
-            </Col>
-            <Col span="16" style="text-align: right">
-                <Page 
-                    :total="meta.totalCount" 
-                    :page-size="meta.perPage" 
-                    :page-size-opts="[20, 50]"
-                    show-sizer 
-                    show-total
-                    @on-change="changePage" 
-                    @on-page-size-change="changeSize"
-                    >
-                </Page>
-            </Col>
-        </Row>
+        <div class="content-list">
+            <Button type="primary" style="margin-bottom: 20px" @click="create">
+                <Icon type="plus-round"></Icon> 添加管理员
+            </Button>
+            <Table 
+                :loading="loading"
+                :columns="columns" 
+                :data="items" 
+                @on-sort-change="sort"
+                @on-selection-change="selection"
+                class="content-table"
+                >
+            </Table>
+            <Row class="content-page">
+                <Col span="8">
+                    <Dropdown @on-click="batchAction"  trigger="click" placement="bottom-start" style="margin-left: 20px">
+                        <Button type="primary">
+                            批量操作
+                            <Icon type="arrow-down-b"></Icon>
+                        </Button>
+                        <DropdownMenu slot="list">
+                            <DropdownItem name="deleteAll"><Icon type="trash-a"></Icon> 批量删除</DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
+                </Col>
+                <Col span="16" style="text-align: right">
+                    <Page 
+                        :total="meta.totalCount" 
+                        :page-size="meta.perPage" 
+                        :page-size-opts="[20, 50]"
+                        show-sizer 
+                        show-total
+                        @on-change="changePage" 
+                        @on-page-size-change="changeSize"
+                        >
+                    </Page>
+                </Col>
+            </Row>
+        </div>
     </div>
 </template>
 <script>

@@ -83,12 +83,12 @@ export const appRouter = [{
                 path: 'create',
                 name: 'page-create',
                 meta: {title: '添加单页',},
-                component: resolve => {require(['./views/page/create.vue'], resolve)}
+                component: resolve => {require(['./views/page/form.vue'], resolve)}
             },{
                 path: 'update/:id',
                 name: 'page-update',
                 meta: {title: '更新单页',},
-                component: resolve => {require(['./views/page/update.vue'], resolve)}
+                component: resolve => {require(['./views/page/form.vue'], resolve)}
             }]
         }
     ]
