@@ -17,7 +17,7 @@ util.title = function(title) {
 
 //axios配置
 util.axios = axios.create({
-    baseURL: 'http://localhost:100',
+    baseURL: 'http://localhost:8080/api/',
     timeout: 30000,
 });
 //axios拦截器
