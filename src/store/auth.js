@@ -5,7 +5,8 @@ import router from '../router'
 export default {
 	state: {
 		token: util.cookies.get('token') || null, //token凭证
-		identity: {},  //身份信息
+		adminInfo: {},  //身份信息
+		route:[],
 	},
 	mutations: {
 		token(state, data){
@@ -16,15 +17,18 @@ export default {
                 util.cookies.remove('token')
             }
         },
-        identity(state, data){
-            state.identity = data
+        adminInfo(state, data){
+            state.adminInfo = data
+        },
+        route(state, data){
+            state.route = data
         },
 	},
 	actions: {
 		login({commit},data){ 
 			return new Promise((resolve, reject) => {
 	            auth.login(data).then(response=>{
-	                commit('token',response.data.token)
+	                commit('token',response.data)
 	                resolve(response.data)
 	            }).catch(error=>{
 	            	reject(error)
@@ -32,15 +36,16 @@ export default {
         	})
         },
         logout({commit}){
-            commit('identity',{})
+            commit('adminInfo',{})
             commit('token',null)
             router.push({name:'login'})
         },
-        getIdentity({commit}){
+        getAdminInfo({commit}){
         	return new Promise((resolve, reject) => {
-	            auth.getIdentity().then(response=>{
-	                commit('identity',response.data.identity)
-	                resolve(response.data)
+	            auth.index().then(response=>{
+	                commit('adminInfo',response.data.adminInfo)
+	                commit('route',response.data.route)
+	                resolve(response)
 	            }).catch(error=>{
 	            	reject(error)
 	            })

@@ -16,12 +16,12 @@ util.title = function(title) {
 
 
 //axios配置
-util.axios = axios.create({
+util.http = axios.create({
     baseURL: 'http://localhost:8080/api/',
     timeout: 30000,
 });
 //axios拦截器
-util.axios.interceptors.request.use(config => {
+util.http.interceptors.request.use(config => {
     if (store.state.auth.token) {
         config.headers.Authorization = 'Bearer ' +  store.state.auth.token;
     }
@@ -29,7 +29,7 @@ util.axios.interceptors.request.use(config => {
 }, error => {
     return Promise.reject(error);
 })
-util.axios.interceptors.response.use(data => { 
+util.http.interceptors.response.use(data => { 
 	return data;
 }, error => {
     if (!error.response) {
@@ -37,9 +37,7 @@ util.axios.interceptors.response.use(data => {
     }
     return Promise.reject(error.response.data.error)
 })
-util.upload = axios.create({
-    timeout: 100000,
-});
+util.axios = axios.create();
 
 
 //php时间戳格式化

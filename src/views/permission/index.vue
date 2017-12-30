@@ -55,7 +55,7 @@
                     <Input v-model="modal.formItem.description"></Input>
                 </FormItem>
             </Form>
-        </Modal>
+        </Modal> 
     </div>
 </template>
 <script>
@@ -65,12 +65,13 @@
         data() {
             return {
                 loading:true,
-                items:[],
-                meta:{
+                data:[],
+                page:{
                     currentPage:1, //当前页面
                     perPage:20, //每页数据
                     totalCount:0, //数据条数
                 },
+                selection:[],
                 columns: [
                     {
                         type: 'selection',
@@ -159,19 +160,20 @@
                         { required: true, message: '权限名称不能为空', trigger: 'blur' },
                     ],
                 },
+
             }
         },
         methods: {
-            getItems(page,perPage,sort){
+            getData(page,perPage,sort){
                 this.loading = true;
                 let params = {
-                    "page": page ? page : this.meta.currentPage,
-                    "per-page": perPage ? perPage : this.meta.perPage,
+                    "page": page ? page : this.page.currentPage,
+                    "per-page": perPage ? perPage : this.page.perPage,
                     "sort": sort ? sort : 'id',
                 }
-                permission.getItems(params).then(response=>{
-                    this.items = response.data.items
-                    this.meta = response.data._meta
+                permission.getData(params).then(response=>{
+                    this.data = response.data.data
+                    this.page = response.data.page
                     this.loading = false
                 }).catch(error=>{
                     this.$Message.error(error)
@@ -179,17 +181,40 @@
                 })
             },
             changePage(page){
-                this.getItems(page, this.meta.perPage)
+                this.getData(page, this.meta.perPage)
             },
             changeSize(perPage){
-                this.getItems(this.meta.currentPage, perPage)
+                this.getData(this.meta.currentPage, perPage)
             },
             sort({key,order}){
                 let sort = (order === 'asc') ? key : '-'+ key
-                this.getItems(null,null,sort)
+                this.getData(null,null,sort)
             },
             selection(items){
-                this.selectionItems = items
+                this.selection = items
+            },
+            batch(action){
+                let data = {}, params = [], msg = {delete:'批量删除'}
+                if (action === 'delete') {
+                    this.selection.forEach((item,index)=>{
+                        params.push(item.id)
+                    })
+                }
+                data[action] = params;
+                text = msg[action] ? msg[action] : '批量操作'
+                this.$Modal.confirm({
+                    title: text,
+                    content: `您确定要${text}${data.length}条数据?`,
+                    onOk: () => {
+                        permission.batch(data).then(response=>{
+                            this.$Message.success(`${text}${response.data}条数据成功`)
+                            this.getData()
+                        }).catch(error=>{
+                            this.$Message.success(error)
+                        })
+                    },
+                })
+
             },
             batchAction(action){
                 if (action === 'deleteAll') {
@@ -201,7 +226,7 @@
                         title: '确认删除',
                         content: `您确定要批量删除${this.selectionItems.length}条数据吗?`,
                         onOk: () => {
-                            permission.deleteAll({id:data.substr(0,data.length-1)}).then(response=>{
+                            permission.batch({id:data.substr(0,data.length-1)}).then(response=>{
                                 this.$Message.success(response.data + '条数据删除成功！')
                                 this.getItems()
                             }).catch(error=>{

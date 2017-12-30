@@ -79,14 +79,14 @@
                     this.formItem = response.data
                     let roles = []
                     response.data.roles.forEach(item=>{
-                        roles.push(item.id)
+                        roles.push = item.id
                     })
                     this.formItem.roles = roles
                 }).catch(error=>{
                     this.$Message.error(error)
                 })
-                role.getItems().then(response=>{
-                    this.roles = response.data.items
+                role.all().then(response=>{
+                    this.roles = response.data.data
                 }).catch(error=>{
                     this.$Message.error(error)
                 })

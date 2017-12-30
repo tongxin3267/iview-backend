@@ -1,23 +1,23 @@
 import util from '../libs/util';
 
-const _url = 'page';
+const page = 'admin';
 export default {
-	getItems(params){ 
-		return util.axios.get(_url,{params:params});
+	all(params){
+		return util.http.get(_url,{params:params});
 	},
-	view(id){
-		return util.axios.get(_url + '/' + id);
+	view(id,{params:params}){
+		return util.http.get(_url + '/' + id,{params:params});
 	},
 	create(data){
-		return util.axios.post(_url,data);
+		return util.http.post(_url,data);
 	},
 	update(id,data){
-		return util.axios.put(_url + '/' + id,data);
+		return util.http.put(_url + '/' + id,data);
 	},
 	delete(id){
-		return util.axios.delete(_url + '/' + id);
+		return util.http.delete(_url + '/' + id);
 	},
 	batch(data){
-		return util.axios.post(_url + '/batch',data);
+		return util.http.post(_url + '/batch',data);
 	},
 }

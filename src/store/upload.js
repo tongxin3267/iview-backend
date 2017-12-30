@@ -12,7 +12,7 @@ export default {
 	actions: {
         getUploadConfig({commit}){
             return new Promise((resolve, reject) => {
-	            auth.getUploadConfig().then(response=>{
+	            auth.uploadConfig().then(response=>{
 	                commit('uploadConfig',response.data)
 	                resolve(response)
 	            }).catch(error=>{
@@ -38,7 +38,7 @@ export default {
 		            formData = new FormData;
 		            formData.append('file',file);
 		            formData.append('token',token);
-		        util.upload.post(server,formData).then(res => {
+		        util.axios.post(server,formData,{timeout: 100000}).then(res => {
 		            resolve(domain + res.data.fkey);
 		        }).catch(error => {
 		            reject('上传至云服务器失败');

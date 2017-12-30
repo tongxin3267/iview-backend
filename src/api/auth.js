@@ -2,16 +2,16 @@ import util from '../libs/util';
 const _url = 'auth'; 
 export default {
     login(data) {
-        return util.axios.post(_url + '/login', data)
+        return util.http.post(_url + '/login', data)
     },
     password(data){
-    	return util.axios.put(_url + '/password', data)
+    	return util.http.put(_url + '/password', data)
     },
-    getIdentity() {
-        return util.axios.get(_url + '/identity')
+    index() {
+        return util.http.get(_url + '/index')
     },
-    getUploadConfig() {
-        return util.axios.get(_url + '/upload-config')
+    uploadConfig() {
+        return util.http.get(_url + '/upload-config')
     },
 
 }

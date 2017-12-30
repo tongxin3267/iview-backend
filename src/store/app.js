@@ -1,5 +1,6 @@
 export default {
 	state: {
+		title:'',
 		show:false,
 		sideMenu:[],
 		openSubmenu:[],
@@ -19,13 +20,15 @@ export default {
         	state.show = data
         },
         filerMenu(state,data){
-        	state.sideMenu.forEach((menu)=>{
-        		menu.children.forEach((item,index)=>{
+        	let sideMenu = state.sideMenu;
+        	sideMenu.forEach((menu)=>{
+        		sideMenu.children.forEach((item,index)=>{
         			if (item.meta.auth && (data.indexOf(item.meta.auth) === -1)) {
-        				menu.children.splice(index,1)
+        				sideMenu.children.splice(index,1)
         			}
         		})
         	})
+        	state.sideMenu = sideMenu;
         }
 	},
 	actions: {

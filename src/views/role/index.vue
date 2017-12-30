@@ -21,7 +21,7 @@
                         <Icon type="arrow-down-b"></Icon>
                     </Button>
                     <DropdownMenu slot="list">
-                        <DropdownItem name="deleteAll"><Icon type="trash-a"></Icon> 批量删除</DropdownItem>
+                        <DropdownItem name="delete"><Icon type="trash-a"></Icon> 批量删除</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
             </Col>
@@ -62,12 +62,13 @@
         data() {
             return {
                 loading:true,
-                items:[],
+                data:[],
                 meta:{
                     currentPage:1, //当前页面
                     perPage:20, //每页数据
                     totalCount:0, //数据条数
                 },
+                selection:[],
                 columns: [
                     {
                         type: 'selection',
@@ -152,13 +153,13 @@
                     }
                 ],
                 modal:{
-                    id:null,
                     show:false,
                     loading:true,
-                    title:'',
+                    title:null,
                     formItem:{
-                        name:'',
-                        description:''
+                        id:null,
+                        name:null,
+                        description:null
                     },
                 },
                 rules:{
@@ -172,16 +173,16 @@
             }
         },
         methods: {
-            getItems(page,perPage,sort){
+             getData(page,perPage,sort){
                 this.loading = true;
                 let params = {
-                    "page": page ? page : this.meta.currentPage,
-                    "per-page": perPage ? perPage : this.meta.perPage,
+                    "page": page ? page : this.page.currentPage,
+                    "per-page": perPage ? perPage : this.page.perPage,
                     "sort": sort ? sort : 'id',
                 }
-                role.getItems(params).then(response=>{
-                    this.items = response.data.items
-                    this.meta = response.data._meta
+                role.getData(params).then(response=>{
+                    this.data = response.data.data
+                    this.page = response.data.page
                     this.loading = false
                 }).catch(error=>{
                     this.$Message.error(error)
@@ -189,50 +190,50 @@
                 })
             },
             changePage(page){
-                this.getItems(page, this.meta.perPage)
+                this.getData(page, this.meta.perPage)
             },
             changeSize(perPage){
-                this.getItems(this.meta.currentPage, perPage)
+                this.getData(this.meta.currentPage, perPage)
             },
             sort({key,order}){
                 let sort = (order === 'asc') ? key : '-'+ key
-                this.getItems(null,null,sort)
+                this.getData(null,null,sort)
             },
             selection(items){
-                this.selectionItems = items
+                this.selection = items
             },
-            batchAction(action){
-                if (action === 'deleteAll') {
-                    let data = ''
+            batch(action){
+                let data = {}, params = [], msg = {delete:'批量删除'}
+                if (action === 'delete') {
                     this.selectionItems.forEach((item,index)=>{
-                        data += (item.id + ',')
-                    })
-                    this.$Modal.confirm({
-                        title: '确认删除',
-                        content: `您确定要批量删除${this.selectionItems.length}条数据吗?`,
-                        onOk: () => {
-                            role.deleteAll({id:data.substr(0,data.length-1)}).then(response=>{
-                                this.$Message.success(response.data + '条数据删除成功！')
-                                this.getItems()
-                            }).catch(error=>{
-                                this.$Message.error(error)
-                            })
-                        },
+                        params.push(item.id)
                     })
                 }
+                data[action] = params;
+                text = msg[action] ? msg[action] : '批量操作'
+                this.$Modal.confirm({
+                    title: text,
+                    content: `您确定要${text}${data.length}条数据?`,
+                    onOk: () => {
+                        role.batch(data).then(response=>{
+                            this.$Message.success(`${text}${response.data}条数据成功`)
+                            this.getData()
+                        }).catch(error=>{
+                            this.$Message.success(error)
+                        })
+                    },
+                })
+
             },
             create(){
-                this.$refs.formItem.resetFields();
-                this.modal.id = null
+                this.$refs.formItem.resetFields()
                 this.modal.title='添加角色'
                 this.modal.show = true
             },
             update(row){
-                this.$refs.formItem.resetFields();
-                this.modal.id = row.id
-                this.modal.formItem.name = row.name
-                this.modal.formItem.description = row.description
+                this.$refs.formItem.resetFields()
                 this.modal.title='更新角色'
+                this.modal.formItem = row
                 this.modal.show = true
             },
             assign(row){
@@ -245,7 +246,7 @@
                     onOk: () => {
                         role.delete(row.id).then(res => {
                             this.$Message.success('删除成功')
-                            this.getItems()
+                            this.getData()
                         }).catch(error=>{
                             this.$Message.error(error)
                         })
@@ -255,11 +256,11 @@
             handleSubmit(){
                 this.$refs.formItem.validate((valid) => {
                     if (valid) {
-                        if (this.modal.id) {
+                        if (this.formItem.id) {
                             role.update(this.modal.id,this.modal.formItem).then(response=>{
                                 this.$Message.success('修改成功')
                                 this.modal.show = false
-                                this.getItems()
+                                this.getData()
                             }).catch(error=>{
                                 this.$Message.error(error)
                                 this.modal.loading = false
@@ -268,7 +269,7 @@
                             role.create(this.modal.formItem).then(response=>{
                                 this.$Message.success('添加成功')
                                 this.modal.show = false
-                                this.getItems()
+                                this.getData()
                             }).catch(error=>{
                                 this.$Message.error(error)
                                 this.modal.loading = false
@@ -284,7 +285,7 @@
             }
         },
         created() {
-            this.getItems()
+            this.getData()
         },
     };
 </script>

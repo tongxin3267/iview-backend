@@ -52,8 +52,8 @@
                 openSubmenu:state => state.app.openSubmenu,
                 dropdownItem:state => state.app.dropdownItem,
                 show:state => state.app.show,
-                name:state => state.auth.identity.nickname,
-                avatar:state => state.auth.identity.avatar,
+                name:state => state.auth.adminInfo.nickname,
+                avatar:state => state.auth.adminInfo.avatar,
             }),
         },
         methods: {
@@ -62,21 +62,19 @@
                 'openSubmenuInit',
                 'dropdownItemInit',
                 'filerMenu',
-                'getIdentity',
+                'getAdminInfo',
                 'getUploadConfig'
             ]),
         },
-        created () {
-            this.getIdentity().then(response=>{
+        mounted(){
+            this.getAdminInfo().then(response=>{
                 //成功拉取身份信息
-                this.filerMenu(response.filterRouter)
+                this.filerMenu(response.data.route)
                 this.getUploadConfig()
             }).catch(error=>{
                 this.$Message.error(error.message)
                 this.$store.dispatch('logout')
             }) 
-        },
-        mounted(){
             this.sideMenuInit(appRouter)
             let openSubmenu = []
             appRouter.forEach((item)=>{

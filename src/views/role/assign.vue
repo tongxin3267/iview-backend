@@ -3,7 +3,7 @@
         <span style="display: block;margin-bottom:10px;font-size: 14px;">{{role.name}} [ {{role.description}} ]</span>
         <CheckboxGroup v-model="formItem.permissions">
             <template v-for="permission in permissions">
-                <Checkbox :label="permission.id" style="padding-bottom:15px">{{permission.title}} [ {{permission.name}} ]</Checkbox> <br/>
+                <Checkbox :label="permission.id" style="padding-bottom:15px">{{route.name}} [ {{route.description}} ]</Checkbox> <br/>
             </template>
         </CheckboxGroup>
         <br/>
@@ -42,14 +42,16 @@
             if (id) {
                 role.view(id).then(response=>{
                     this.role = response.data
+                    let permissions = []
                     response.data.permissions.forEach(item =>{
-                        this.formItem.permissions.push(item.id)
+                        permissions.push(item.id)
                     })
+                    this.formItem.permissions = permissions
                 }).catch(error=>{
                     this.$Message.error(error)
                 })
-                permission.getItems({"page":1,"per-page":100}).then(response=>{
-                    this.permissions = response.data.items
+                permission.appRoute().then(response=>{
+                    this.permissions = response.data
                 }).catch(error=>{
                     this.$Message.error(error)
                 })

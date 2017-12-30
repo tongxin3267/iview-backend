@@ -79,8 +79,8 @@
             }
         },
         created(){
-            role.getItems().then(response=>{
-                this.roles = response.data.items
+            role.all().then(response=>{
+                this.roles = response.data.data
             }).catch(error=>{
                 this.$Message.error(error)
             })

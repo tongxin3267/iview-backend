@@ -13,8 +13,7 @@ Vue.use(iView);
 
 
 //注册axios为 $http
-Vue.prototype.$http = util.axios;
-Vue.prototype.$upload = util.upload;
+Vue.prototype.$http = util.http;
 
 new Vue({
     el:'#app',

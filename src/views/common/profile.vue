@@ -64,7 +64,7 @@
     export default {
         computed:{
         	admin(){
-        		return this.$store.state.auth.identity;
+        		return this.$store.state.auth.adminInfo;
         	},
         	accepts(){
         		return this.$store.state.upload.uploadConfig.accepts;
