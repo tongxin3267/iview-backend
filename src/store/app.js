@@ -1,7 +1,6 @@
 export default {
 	state: {
 		title:'',
-		show:false,
 		sideMenu:[],
 		openSubmenu:[],
 		dropdownItem:[],
@@ -15,9 +14,6 @@ export default {
         },
         dropdownItem(state, data){
         	state.dropdownItem = data
-        },
-        show(state, data){
-        	state.show = data
         },
         filerMenu(state,data){
         	let sideMenu = state.sideMenu;
@@ -43,7 +39,6 @@ export default {
 		},
 		filerMenu({commit},data){
 			commit('filerMenu',data)
-			commit('show',true)
 		}
 	}
 }

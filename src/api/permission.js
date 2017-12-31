@@ -1,6 +1,6 @@
 import util from '../libs/util';
 
-const page = 'permission';
+const _url = 'permission';
 export default {
 	all(params){
 		return util.http.get(_url,{params:params});

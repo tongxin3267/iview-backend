@@ -14,7 +14,7 @@
                 <Row>
                     <Col span="4">
                         <div class="layout-navigate">
-                            <sideMenu v-if="show" :sideMenu="sideMenu" :openSubmenu="openSubmenu" :iconSize="14"></sideMenu>
+                            <sideMenu :sideMenu="sideMenu" :openSubmenu="openSubmenu" :iconSize="14"></sideMenu>
                         </div>
                     </Col>
                     <Col span="20">
@@ -51,7 +51,6 @@
                 sideMenu:state => state.app.sideMenu,
                 openSubmenu:state => state.app.openSubmenu,
                 dropdownItem:state => state.app.dropdownItem,
-                show:state => state.app.show,
                 name:state => state.auth.adminInfo.nickname,
                 avatar:state => state.auth.adminInfo.avatar,
             }),
@@ -61,16 +60,12 @@
                 'sideMenuInit',
                 'openSubmenuInit',
                 'dropdownItemInit',
-                'filerMenu',
                 'getAdminInfo',
                 'getUploadConfig'
             ]),
         },
         mounted(){
             this.getAdminInfo().then(response=>{
-                //成功拉取身份信息
-                this.filerMenu(response.data.route)
-                this.getUploadConfig()
             }).catch(error=>{
                 this.$Message.error(error.message)
                 this.$store.dispatch('logout')
